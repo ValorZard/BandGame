@@ -1,16 +1,25 @@
-[gd_scene format=3 uid="uid://bbf7rauxpqwti"]
+[gd_scene load_steps=4 format=3 uid="uid://bbf7rauxpqwti"]
+
+[ext_resource type="Script" path="res://beatmap_maker.gd" id="1_euq0e"]
+[ext_resource type="Texture2D" uid="uid://c2v8nak1xnxnn" path="res://assets/textures/notes/icon.svg" id="1_j8k14"]
+[ext_resource type="Script" path="res://note_timeline.gd" id="3_g62q5"]
 
 [node name="beatmap_maker" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_euq0e")
 
-[node name="Panel" type="Panel" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
-offset_right = 1146.0
-offset_bottom = 172.0
+offset_top = 89.0
+offset_right = 1153.0
+offset_bottom = 337.0
+horizontal_scroll_mode = 2
 
-[node name="HScrollBar" type="HScrollBar" parent="Panel"]
+[node name="NoteTimeline" type="TextureRect" parent="ScrollContainer"]
+custom_minimum_size = Vector2(7000, 0)
 layout_mode = 2
-offset_top = 154.0
-offset_right = 1142.0
-offset_bottom = 170.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("1_j8k14")
+script = ExtResource("3_g62q5")
