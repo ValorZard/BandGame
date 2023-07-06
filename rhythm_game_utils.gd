@@ -7,6 +7,11 @@ enum NOTE_TYPES {NORMAL, HOLD}
 enum NOTES {A, B, C, D, E}
 
 enum HIT_RESULTS {NO_HIT, HIT, PERFECT}
+
+# visual stuff
+# This reallllly shouldn't be hardcoded but we ball i guess
+var note_sprite : PackedScene = preload("res://note.tscn")
+
 # we hit this note when it needs to be hit
 class Note:
 	var note_name : NOTES
@@ -37,6 +42,7 @@ class HoldNote extends Note:
 		self.note_type = NOTE_TYPES.HOLD
 		self.end_time = end_time
 
+# returns a note array, with each element in the array being a tuple of a note object and its sprite represenation
 func load_beatmap(beatmap_file_path : String) -> Array:
 	var note_array : Array
 	# file stuff
@@ -71,8 +77,6 @@ func load_beatmap(beatmap_file_path : String) -> Array:
 	return note_array
 
 func note_spawner(note_obj : RhythmGameUtils.Note):
-	# This reallllly shouldn't be hardcoded but we ball i guess
-	var note_sprite : PackedScene = preload("res://note.tscn")
 	# Spawns a note sprite instance for every note object in the map array.
 	var new_note = note_sprite.instantiate()
 	# set the correct note label
