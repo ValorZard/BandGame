@@ -2,16 +2,9 @@ extends Node2D
 
 var time_elapsed_since_start : float = 0
 
-# note data
-# duration of a note doesnt matter
-enum NOTE_TYPES {NORMAL, HOLD}
-# sorta analagous to actual notes (B, C, C#, etc)
-enum NOTES {A, B, C, D, E}
 
 # hit window stuff (in seconds)
 var view_window : float = 1 # from now to now + view window, thats the notes that will show
-
-enum HIT_RESULTS {NO_HIT, HIT, PERFECT}
 
 # note management
 @export var note_array : Array
@@ -31,36 +24,6 @@ var score : int
 @export var beats_per_minute : float = 112 
 
 var note_sprite
-
-# we hit this note when it needs to be hit
-class Note:
-	var note_name : NOTES
-	var start_time : float
-	var note_type : NOTE_TYPES
-	var already_hit : bool
-	
-	func _init(note_name, start_time):
-		self.note_name = note_name
-		self.start_time = start_time
-		self.note_type = NOTE_TYPES.NORMAL
-		self.already_hit = false
-	
-	# returns three values, no hit, hit, or perfect
-	func check_hit(time_hit : float) -> HIT_RESULTS:
-		#print(time_hit, " ", self.start_time)
-		if time_hit >= start_time - GameManager.perfect_hit_window and time_hit <= start_time + GameManager.perfect_hit_window:
-			return HIT_RESULTS.PERFECT
-		if time_hit >= start_time - GameManager.hit_window and time_hit <= start_time + GameManager.hit_window:
-			return HIT_RESULTS.HIT
-		return HIT_RESULTS.NO_HIT
-
-# we hold this note for as long as it takes
-class HoldNote extends Note:
-	var end_time : float
-	func _init(note_name, start_time, end_time):
-		super._init(note_name, start_time)
-		self.note_type = NOTE_TYPES.HOLD
-		self.end_time = end_time
 
 # how the note array works if its a single track game
 # only care about notes charted, notes can happen at any time
@@ -97,15 +60,15 @@ func load_beatmap():
 			# actually convert our json data into usable beatmap data
 			for note_data in data_received["notes"]:
 				# parse each note and convert into actual note object
-				var note_name : NOTES
+				var note_name : RhythmGameUtils.NOTES
 				match note_data["name"]:
-					"A": note_name = NOTES.A
-					"B": note_name = NOTES.B
-					"C": note_name = NOTES.C
-					"D": note_name = NOTES.D
-					"E": note_name = NOTES.E
+					"A": note_name = RhythmGameUtils.NOTES.A
+					"B": note_name = RhythmGameUtils.NOTES.B
+					"C": note_name = RhythmGameUtils.NOTES.C
+					"D": note_name = RhythmGameUtils.NOTES.D
+					"E": note_name = RhythmGameUtils.NOTES.E
 				var note_start_time : float = note_data["start_time"]
-				note_array.append(Note.new(note_name, note_start_time))
+				note_array.append(RhythmGameUtils.Note.new(note_name, note_start_time))
 			
 			# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
 			note_array = note_array.map(note_spawner)
@@ -115,16 +78,16 @@ func load_beatmap():
 	else:
 		print("JSON Parse Error: ", json.get_error_message(), " in ", content, " at line ", json.get_error_line())
 
-func note_spawner(note_obj : Note):
+func note_spawner(note_obj : RhythmGameUtils.Note):
 	# Spawns a note sprite instance for every note object in the map array.
 	var new_note = note_sprite.instantiate()
 	# set the correct note label
 	match note_obj.note_name:
-		NOTES.A: new_note.get_node("NoteLabel").text = "A"
-		NOTES.B: new_note.get_node("NoteLabel").text = "B"
-		NOTES.C: new_note.get_node("NoteLabel").text = "C"
-		NOTES.D: new_note.get_node("NoteLabel").text = "D"
-		NOTES.E: new_note.get_node("NoteLabel").text = "E"
+		RhythmGameUtils.NOTES.A: new_note.get_node("NoteLabel").text = "A"
+		RhythmGameUtils.NOTES.B: new_note.get_node("NoteLabel").text = "B"
+		RhythmGameUtils.NOTES.C: new_note.get_node("NoteLabel").text = "C"
+		RhythmGameUtils.NOTES.D: new_note.get_node("NoteLabel").text = "D"
+		RhythmGameUtils.NOTES.E: new_note.get_node("NoteLabel").text = "E"
 	# set correct note position (hardcoded for now)
 	new_note.position.y = 300
 	add_child(new_note)
@@ -140,7 +103,7 @@ func delete_note(note_pair):
 	note_pair[0].already_hit = true
 	note_pair[1].queue_free()
 
-func hit_note(note_name : NOTES, note_array : Array, current_time : float):
+func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_time : float):
 	$DebugNoteLabel.text = str("note name ", note_name)
 	
 	# go through every single note on screen and see which one is close enough to hit, and wheather it matches the note the player hit
@@ -154,10 +117,10 @@ func hit_note(note_name : NOTES, note_array : Array, current_time : float):
 				
 			elif note_array[note][0].note_name == note_name:
 				var hit_result = note_array[note][0].check_hit(current_time)
-				if hit_result != HIT_RESULTS.NO_HIT:
-					if hit_result == HIT_RESULTS.PERFECT:
+				if hit_result != RhythmGameUtils.HIT_RESULTS.NO_HIT:
+					if hit_result == RhythmGameUtils.HIT_RESULTS.PERFECT:
 						score += 1000
-					elif hit_result == HIT_RESULTS.HIT:
+					elif hit_result == RhythmGameUtils.HIT_RESULTS.HIT:
 						score += 100
 					delete_note(note_array[note])
 					
@@ -180,16 +143,16 @@ func _process(delta):
 		print("note1")
 		# we want to calculate the time missed by to make the note perfect
 		# we want to center the note in the middle of the beat
-		hit_note(NOTES.A, note_array, time_elapsed_since_start)
+		hit_note(RhythmGameUtils.NOTES.A, note_array, time_elapsed_since_start)
 	if Input.is_action_just_pressed("note2"):
 		print("note2")
-		hit_note(NOTES.B, note_array, time_elapsed_since_start)
+		hit_note(RhythmGameUtils.NOTES.B, note_array, time_elapsed_since_start)
 	if Input.is_action_just_pressed("note3"):
 		print("note3")
-		hit_note(NOTES.C, note_array, time_elapsed_since_start)
+		hit_note(RhythmGameUtils.NOTES.C, note_array, time_elapsed_since_start)
 	if Input.is_action_just_pressed("note4"):
 		print("note4")
-		hit_note(NOTES.D, note_array, time_elapsed_since_start)
+		hit_note(RhythmGameUtils.NOTES.D, note_array, time_elapsed_since_start)
 	
 	# visual stuff
 	
