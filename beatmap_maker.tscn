@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bbf7rauxpqwti"]
+
+[node name="beatmap_maker" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 1146.0
+offset_bottom = 172.0
+
+[node name="HScrollBar" type="HScrollBar" parent="Panel"]
+layout_mode = 2
+offset_top = 154.0
+offset_right = 1142.0
+offset_bottom = 170.0

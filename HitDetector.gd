@@ -115,9 +115,18 @@ func load_beatmap():
 	else:
 		print("JSON Parse Error: ", json.get_error_message(), " in ", content, " at line ", json.get_error_line())
 
-func note_spawner(note_obj):
+func note_spawner(note_obj : Note):
 	# Spawns a note sprite instance for every note object in the map array.
 	var new_note = note_sprite.instantiate()
+	# set the correct note label
+	match note_obj.note_name:
+		NOTES.A: new_note.get_node("NoteLabel").text = "A"
+		NOTES.B: new_note.get_node("NoteLabel").text = "B"
+		NOTES.C: new_note.get_node("NoteLabel").text = "C"
+		NOTES.D: new_note.get_node("NoteLabel").text = "D"
+		NOTES.E: new_note.get_node("NoteLabel").text = "E"
+	# set correct note position (hardcoded for now)
+	new_note.position.y = 300
 	add_child(new_note)
 	
 	return [note_obj, new_note]
