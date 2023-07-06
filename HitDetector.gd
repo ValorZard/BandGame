@@ -42,57 +42,12 @@ func _ready():
 	
 	$HitZone.position.y = GameManager.hit_zone_left_offset
 	
-	load_beatmap()
+	note_array = RhythmGameUtils.load_beatmap(beatmap_file_path)
 	
 #	note_array.append(Note.new(NOTES.A, 1.25))
 #	note_array.append(Note.new(NOTES.B, 1.5))
 #	note_array.append(Note.new(NOTES.C, 1.75))
 #	note_array.append(Note.new(NOTES.D, 2.0))
-
-func load_beatmap():
-	var file = FileAccess.open(beatmap_file_path, FileAccess.READ)
-	var content = file.get_as_text()
-	var json = JSON.new()
-	var error = json.parse(content)
-	if error == OK:
-		var data_received = json.data
-		if typeof(data_received) == TYPE_DICTIONARY:
-			# actually convert our json data into usable beatmap data
-			for note_data in data_received["notes"]:
-				# parse each note and convert into actual note object
-				var note_name : RhythmGameUtils.NOTES
-				match note_data["name"]:
-					"A": note_name = RhythmGameUtils.NOTES.A
-					"B": note_name = RhythmGameUtils.NOTES.B
-					"C": note_name = RhythmGameUtils.NOTES.C
-					"D": note_name = RhythmGameUtils.NOTES.D
-					"E": note_name = RhythmGameUtils.NOTES.E
-				var note_start_time : float = note_data["start_time"]
-				note_array.append(RhythmGameUtils.Note.new(note_name, note_start_time))
-			
-			# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
-			note_array = note_array.map(note_spawner)
-			
-		else:
-			print("Unexpected data")
-	else:
-		print("JSON Parse Error: ", json.get_error_message(), " in ", content, " at line ", json.get_error_line())
-
-func note_spawner(note_obj : RhythmGameUtils.Note):
-	# Spawns a note sprite instance for every note object in the map array.
-	var new_note = note_sprite.instantiate()
-	# set the correct note label
-	match note_obj.note_name:
-		RhythmGameUtils.NOTES.A: new_note.get_node("NoteLabel").text = "A"
-		RhythmGameUtils.NOTES.B: new_note.get_node("NoteLabel").text = "B"
-		RhythmGameUtils.NOTES.C: new_note.get_node("NoteLabel").text = "C"
-		RhythmGameUtils.NOTES.D: new_note.get_node("NoteLabel").text = "D"
-		RhythmGameUtils.NOTES.E: new_note.get_node("NoteLabel").text = "E"
-	# set correct note position (hardcoded for now)
-	new_note.position.y = 300
-	add_child(new_note)
-	
-	return [note_obj, new_note]
 
 func calculate_current_song_data():
 	# figure out what beat we're on
@@ -140,18 +95,18 @@ func _process(delta):
 	calculate_current_song_data()
 	
 	if Input.is_action_just_pressed("note1"):
-		print("note1")
+		#print("note1")
 		# we want to calculate the time missed by to make the note perfect
 		# we want to center the note in the middle of the beat
 		hit_note(RhythmGameUtils.NOTES.A, note_array, time_elapsed_since_start)
 	if Input.is_action_just_pressed("note2"):
-		print("note2")
+		#print("note2")
 		hit_note(RhythmGameUtils.NOTES.B, note_array, time_elapsed_since_start)
 	if Input.is_action_just_pressed("note3"):
-		print("note3")
+		#print("note3")
 		hit_note(RhythmGameUtils.NOTES.C, note_array, time_elapsed_since_start)
 	if Input.is_action_just_pressed("note4"):
-		print("note4")
+		#print("note4")
 		hit_note(RhythmGameUtils.NOTES.D, note_array, time_elapsed_since_start)
 	
 	# visual stuff
