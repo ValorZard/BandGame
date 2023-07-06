@@ -4,7 +4,7 @@ extends TextureRect
 
 var note_array : Array
 
-var note_selector : PackedScene = preload("res://note_selector.tscn")
+var note_selector : PackedScene = preload("res://src/mapping_engine/note_selector.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
