@@ -10,7 +10,7 @@ enum HIT_RESULTS {NO_HIT, HIT, PERFECT}
 
 # visual stuff
 # This reallllly shouldn't be hardcoded but we ball i guess
-var note_sprite : PackedScene = preload("res://note_sprite.tscn")
+var note_sprite : PackedScene = preload("res://src/note_sprite.tscn")
 
 # we hit this note when it needs to be hit
 class Note:

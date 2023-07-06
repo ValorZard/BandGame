@@ -37,9 +37,7 @@ var note_sprite
 # maybe you can make the middle 
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	note_sprite = load("res://note.tscn")
-	
+func _ready():	
 	$HitZone.position.y = GameManager.hit_zone_left_offset
 	
 	note_array = RhythmGameUtils.load_beatmap(beatmap_file_path)

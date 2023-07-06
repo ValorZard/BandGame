@@ -11,14 +11,14 @@ config_version=5
 [application]
 
 config/name="BandGame"
-run/main_scene="res://TestScene.tscn"
+run/main_scene="res://src/game_engine/beatmap.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GameManager="*res://game_manager.gd"
-RhythmGameUtils="*res://rhythm_game_utils.gd"
+GameManager="*res://src/game_manager.gd"
+RhythmGameUtils="*res://src/game_engine/rhythm_game_utils.gd"
 
 [input]
 
