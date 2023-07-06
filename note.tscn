@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dgqqej1sjrn7b" path="res://assets/textures/notes/noteA.png" id="1_taivt"]
 
 [sub_resource type="Theme" id="Theme_hy543"]
-default_font_size = 20
+default_font_size = 50
 
 [node name="Note" type="Sprite2D"]
 texture = ExtResource("1_taivt")
