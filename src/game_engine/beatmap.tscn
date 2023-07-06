@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://byjt6qcu7xktc"]
 
-[ext_resource type="Script" path="res://HitDetector.gd" id="1_3xjcu"]
-[ext_resource type="Texture2D" uid="uid://dna7ojx2fxoun" path="res://icon.svg" id="3_1q2pg"]
+[ext_resource type="Script" path="res://src/game_engine/HitDetector.gd" id="1_ehuh6"]
+[ext_resource type="Texture2D" uid="uid://cmvxhynvubwrn" path="res://icon.svg" id="3_1q2pg"]
 
 [node name="HitDetector" type="Node2D"]
-script = ExtResource("1_3xjcu")
+script = ExtResource("1_ehuh6")
 
 [node name="DebugBeatLabel" type="Label" parent="."]
 offset_right = 40.0
