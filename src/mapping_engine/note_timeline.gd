@@ -2,6 +2,7 @@ extends TextureRect
 
 @export var beatmap_maker : BeatmapMaker # easy way to get reference to parent
 
+# the position of the notes should update based on the number of beat subdivisions
 var note_array : Array
 
 var note_selector : PackedScene = preload("res://src/mapping_engine/note_selector.tscn")
