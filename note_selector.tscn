@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://jxd8k3dfm1gq"]
+
+[ext_resource type="Texture2D" uid="uid://dgqqej1sjrn7b" path="res://assets/textures/notes/noteA.png" id="1_ekahg"]
+[ext_resource type="Script" path="res://note_selector.gd" id="2_a5r1l"]
+
+[node name="NoteSelector" type="Sprite2D"]
+texture = ExtResource("1_ekahg")
+script = ExtResource("2_a5r1l")
+
+[node name="OptionButton" type="OptionButton" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -56.0
+offset_top = -83.0
+offset_bottom = -41.0
+grow_horizontal = 2
+grow_vertical = 2
+item_count = 4
+popup/item_0/text = "A"
+popup/item_0/id = 0
+popup/item_1/text = "B"
+popup/item_1/id = 1
+popup/item_2/text = "C"
+popup/item_2/id = 2
+popup/item_3/text = "D"
+popup/item_3/id = 3

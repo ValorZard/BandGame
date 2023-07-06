@@ -1,12 +1,12 @@
 [gd_scene load_steps=3 format=3 uid="uid://ty3elqaubn2j"]
 
-[ext_resource type="Texture2D" uid="uid://dgqqej1sjrn7b" path="res://assets/textures/notes/noteA.png" id="1_taivt"]
+[ext_resource type="Texture2D" uid="uid://dgqqej1sjrn7b" path="res://assets/textures/notes/noteA.png" id="1_e3rtw"]
 
 [sub_resource type="Theme" id="Theme_hy543"]
 default_font_size = 50
 
 [node name="Note" type="Sprite2D"]
-texture = ExtResource("1_taivt")
+texture = ExtResource("1_e3rtw")
 
 [node name="NoteLabel" type="Label" parent="."]
 anchors_preset = 8

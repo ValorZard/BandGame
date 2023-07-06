@@ -4,6 +4,8 @@ extends TextureRect
 
 var note_array : Array
 
+var note_selector : PackedScene = preload("res://note_selector.tscn")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -17,7 +19,7 @@ func _gui_input(event):
 			print("Current Song Location: ", current_position_in_song)
 			# TODO: Make it so that you can change the type of note in that location
 			var note_obj : RhythmGameUtils.Note = RhythmGameUtils.Note.new(RhythmGameUtils.NOTES.A, current_position_in_song)
-			var note_sprite := RhythmGameUtils.note_sprite.instantiate()
+			var note_sprite := note_selector.instantiate()
 			# put the note sprite on the right place in the timeline while keeping it centered
 			note_sprite.position.x = event.position.x
 			note_sprite.position.y = self.size.y / 2
