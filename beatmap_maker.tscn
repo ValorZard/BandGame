@@ -16,11 +16,12 @@ offset_right = 1153.0
 offset_bottom = 337.0
 horizontal_scroll_mode = 2
 
-[node name="NoteTimeline" type="TextureRect" parent="ScrollContainer"]
+[node name="NoteTimeline" type="TextureRect" parent="ScrollContainer" node_paths=PackedStringArray("beatmap_maker")]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("1_j8k14")
 script = ExtResource("3_g62q5")
+beatmap_maker = NodePath("../..")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0

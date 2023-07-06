@@ -1,5 +1,6 @@
 extends Control
 
+class_name BeatmapMaker
 
 @export var beats_per_minute : float = 112 
 @export var song_length : float = 60. # in seconds
