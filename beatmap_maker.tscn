@@ -17,9 +17,29 @@ offset_bottom = 337.0
 horizontal_scroll_mode = 2
 
 [node name="NoteTimeline" type="TextureRect" parent="ScrollContainer"]
-custom_minimum_size = Vector2(7000, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = ExtResource("1_j8k14")
 script = ExtResource("3_g62q5")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Length of song in seconds: "
+
+[node name="SongLengthLineEdit" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Number of beat subdivisions:  "
+
+[node name="BeatSubdivisionLineEdit" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+
+[connection signal="text_changed" from="HBoxContainer/SongLengthLineEdit" to="." method="_on_song_length_line_edit_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/BeatSubdivisionLineEdit" to="." method="_on_beat_subdivision_line_edit_text_changed"]

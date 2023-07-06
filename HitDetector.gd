@@ -28,7 +28,7 @@ var score : int
 # don't check at just beat, because each beat is a measure, you want subdivisions
 # but every beat/measure want to draw a line or just make it easier to organize on screen
 # mostly visual, not that important, just juice/polish
-@export var beats_per_minute : int = 112 
+@export var beats_per_minute : float = 112 
 
 var note_sprite
 
