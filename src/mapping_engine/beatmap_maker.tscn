@@ -11,9 +11,9 @@ script = ExtResource("1_3v2b7")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 0
-offset_top = 89.0
+offset_top = 100.0
 offset_right = 1153.0
-offset_bottom = 337.0
+offset_bottom = 348.0
 horizontal_scroll_mode = 2
 
 [node name="NoteTimeline" type="TextureRect" parent="ScrollContainer" node_paths=PackedStringArray("beatmap_maker")]
@@ -37,10 +37,46 @@ layout_mode = 2
 
 [node name="Label2" type="Label" parent="HBoxContainer"]
 layout_mode = 2
-text = "Number of beat subdivisions:  "
+text = "Number of measure subdivisions:  "
 
-[node name="BeatSubdivisionLineEdit" type="LineEdit" parent="HBoxContainer"]
+[node name="MeasureSubdivisionLineEdit" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Beats per minute:  "
+
+[node name="BPMLineEdit" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="TimeSignatureManager" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 870.0
+offset_right = 910.0
+offset_bottom = 40.0
+
+[node name="Label4" type="Label" parent="TimeSignatureManager"]
+layout_mode = 2
+offset_right = 117.0
+offset_bottom = 26.0
+text = "Time Signature:"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TimeSignatureManager"]
+layout_mode = 0
+offset_left = 125.0
+offset_right = 192.0
+offset_bottom = 66.0
+
+[node name="TimeSingnatureTopPart" type="LineEdit" parent="TimeSignatureManager/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TimeSignatureManager/VBoxContainer"]
+layout_mode = 2
+text = "-------------"
+
+[node name="TimeSignatureBottomPart" type="LineEdit" parent="TimeSignatureManager/VBoxContainer"]
 layout_mode = 2
 
 [connection signal="text_changed" from="HBoxContainer/SongLengthLineEdit" to="." method="_on_song_length_line_edit_text_changed"]
-[connection signal="text_changed" from="HBoxContainer/BeatSubdivisionLineEdit" to="." method="_on_beat_subdivision_line_edit_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/MeasureSubdivisionLineEdit" to="." method="_on_measure_subdivision_line_edit_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/BPMLineEdit" to="." method="_on_bpm_line_edit_text_changed"]

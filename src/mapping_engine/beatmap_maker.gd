@@ -10,7 +10,8 @@ class_name BeatmapMaker
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$HBoxContainer/SongLengthLineEdit.text = str(song_length)
-	$HBoxContainer/BeatSubdivisionLineEdit.text = str(measure_subdivisions)
+	$HBoxContainer/MeasureSubdivisionLineEdit.text = str(measure_subdivisions)
+	$HBoxContainer/BPMLineEdit.text = str(beats_per_minute)
 	update_timeline()
 
 func update_timeline():
@@ -28,7 +29,13 @@ func _on_song_length_line_edit_text_changed(new_text : String):
 		update_timeline()
 
 
-func _on_beat_subdivision_line_edit_text_changed(new_text):
+func _on_measure_subdivision_line_edit_text_changed(new_text):
 	if new_text.is_valid_int():
 		measure_subdivisions = int(new_text)
+		update_timeline()
+
+
+func _on_bpm_line_edit_text_changed(new_text):
+	if new_text.is_valid_float():
+		beats_per_minute = float(new_text)
 		update_timeline()
