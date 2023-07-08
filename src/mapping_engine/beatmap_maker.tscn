@@ -67,16 +67,18 @@ offset_left = 125.0
 offset_right = 192.0
 offset_bottom = 66.0
 
-[node name="TimeSingnatureTopPart" type="LineEdit" parent="TimeSignatureManager/VBoxContainer"]
+[node name="NumbOfNotesInMeasureLineEdit" type="LineEdit" parent="TimeSignatureManager/VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="TimeSignatureManager/VBoxContainer"]
 layout_mode = 2
 text = "-------------"
 
-[node name="TimeSignatureBottomPart" type="LineEdit" parent="TimeSignatureManager/VBoxContainer"]
+[node name="NoteValueLineEdit" type="LineEdit" parent="TimeSignatureManager/VBoxContainer"]
 layout_mode = 2
 
 [connection signal="text_changed" from="HBoxContainer/SongLengthLineEdit" to="." method="_on_song_length_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/MeasureSubdivisionLineEdit" to="." method="_on_measure_subdivision_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/BPMLineEdit" to="." method="_on_bpm_line_edit_text_changed"]
+[connection signal="text_changed" from="TimeSignatureManager/VBoxContainer/NumbOfNotesInMeasureLineEdit" to="." method="_on_number_of_notes_in_measure_text_changed"]
+[connection signal="text_changed" from="TimeSignatureManager/VBoxContainer/NoteValueLineEdit" to="." method="_on_note_value_text_changed"]
