@@ -24,6 +24,8 @@ func _gui_input(event):
 			# TODO: Make it so that you can change the type of note in that location
 			var note_obj : RhythmGameUtils.Note = RhythmGameUtils.Note.new(RhythmGameUtils.NOTES.A, current_position_in_song)
 			var note_sprite := note_selector.instantiate()
+			# add note object to sprite
+			note_sprite.note = note_obj
 			# put the note sprite on the right place in the timeline while keeping it centered
 			note_sprite.position.x = event.position.x
 			note_sprite.position.y = self.size.y / 2

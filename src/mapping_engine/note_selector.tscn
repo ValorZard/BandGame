@@ -28,3 +28,5 @@ popup/item_2/text = "C"
 popup/item_2/id = 2
 popup/item_3/text = "D"
 popup/item_3/id = 3
+
+[connection signal="item_selected" from="OptionButton" to="." method="_on_option_button_item_selected"]
