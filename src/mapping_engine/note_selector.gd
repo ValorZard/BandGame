@@ -2,9 +2,12 @@ extends Sprite2D
 
 var note : RhythmGameUtils.Note
 
+var option_button : OptionButton
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print($OptionButton.get_selected_id())
+	option_button = $OptionButton
 	set_note_name()
 
 func set_note_name():

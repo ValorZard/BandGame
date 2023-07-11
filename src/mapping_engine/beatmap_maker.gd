@@ -21,7 +21,11 @@ class_name BeatmapMaker
 
 @export var beatmap_player : PackedScene = load("res://src/game_engine/beatmap.tscn")
 
+# note timelien
+
 var note_timeline : NoteTimeline
+
+var note_selector : PackedScene = load("res://src/mapping_engine/note_selector.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,6 +36,7 @@ func _ready():
 	$TimeSignatureManager/VBoxContainer/NoteValueLineEdit.text = str(note_value)
 	note_timeline = $ScrollContainer/NoteTimeline
 	update_timeline()
+	load_beatmap(beatmap_file_path)
 
 func update_timeline():
 	# set size of the note timeline
@@ -77,7 +82,7 @@ func _on_export_button_button_down():
 	export_beatmap()
 
 func export_beatmap():
-	var beatmap_file = FileAccess.open("user://new_beatmap.json", FileAccess.WRITE)
+	var beatmap_file = FileAccess.open(beatmap_file_path, FileAccess.WRITE)
 	var note_array := note_timeline.note_array
 	
 	var beatmap_dictionary : Dictionary = {"notes" : []}
@@ -100,11 +105,69 @@ func export_beatmap():
 	# Store the save dictionary as a new line in the save file.
 	beatmap_file.store_line(json_string)
 
+# returns a note array, with each element in the array being a tuple of a note object and its sprite represenation
+func load_beatmap(beatmap_file_path : String):
+	var note_array : Array
+	# file stuff
+	var file = FileAccess.open(beatmap_file_path, FileAccess.READ)
+	# check if theres anything in the beatmap we can load. if theres nothing, exist
+	if file:
+		var content = file.get_as_text()
+		# json stuff
+		var json = JSON.new()
+		var error = json.parse(content)
+		if error == OK:
+			var data_received = json.data
+			if typeof(data_received) == TYPE_DICTIONARY:
+				# actually convert our json data into usable beatmap data
+				for note_data in data_received["notes"]:
+					# parse each note and convert into actual note object
+					var note_name : RhythmGameUtils.NOTES
+					match note_data["name"]:
+						"A": note_name = RhythmGameUtils.NOTES.A
+						"B": note_name = RhythmGameUtils.NOTES.B
+						"C": note_name = RhythmGameUtils.NOTES.C
+						"D": note_name = RhythmGameUtils.NOTES.D
+						"E": note_name = RhythmGameUtils.NOTES.E
+					var note_start_time : float = note_data["start_time"]
+					note_array.append(RhythmGameUtils.Note.new(note_name, note_start_time))
+				
+				# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
+				note_array = note_array.map(note_spawner)
+			else:
+				print("Unexpected data")
+		else:
+			print("JSON Parse Error: ", json.get_error_message(), " in ", content, " at line ", json.get_error_line())
+		# if this somehow fails, the note array will just be empty
+		note_timeline.note_array = note_array
+	else: 
+		pass
+
+func note_spawner(note_obj : RhythmGameUtils.Note):
+	# Spawns a note sprite instance for every note object in the map array.
+	var note_sprite = note_selector.instantiate()
+	print(note_sprite.option_button)
+	# set note data
+	note_sprite.note = note_obj
+	# set correct note position (hardcoded for now)
+	# put the note sprite on the right place in the timeline while keeping it centered
+	note_sprite.position.x = (note_obj.start_time * note_timeline.size.x) / song_length
+	note_sprite.position.y = note_timeline.size.y / 2
+	note_timeline.add_child(note_sprite)
+	# set the correct note label
+	match note_obj.note_name:
+		RhythmGameUtils.NOTES.A: note_sprite.option_button.selected = RhythmGameUtils.NOTES.A
+		RhythmGameUtils.NOTES.B: note_sprite.option_button.selected = RhythmGameUtils.NOTES.B
+		RhythmGameUtils.NOTES.C: note_sprite.option_button.selected = RhythmGameUtils.NOTES.C
+		RhythmGameUtils.NOTES.D: note_sprite.option_button.selected = RhythmGameUtils.NOTES.D
+		RhythmGameUtils.NOTES.E: note_sprite.option_button.selected = RhythmGameUtils.NOTES.E
+	
+	return [note_obj, note_sprite]
 
 func _on_test_button_button_down():
 	# add beatmap player to root
 	var beatmap_player_instance : BeatmapPlayer = beatmap_player.instantiate()
-	print(beatmap_player_instance)
+	#print(beatmap_player_instance)
 	beatmap_player_instance.beatmap_file_path = beatmap_file_path
 	get_tree().root.add_child(beatmap_player_instance)
 	# remove self from root
