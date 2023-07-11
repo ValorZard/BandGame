@@ -11,7 +11,7 @@ var view_window : float = 1 # from now to now + view window, thats the notes tha
 var beats_per_second : float 
 
 # actual beat map
-var beatmap_file_path : String = "res://test_map.json"
+@export var beatmap_file_path : StringName = "res://test_map.json"
 
 # score management:
 var score : int
