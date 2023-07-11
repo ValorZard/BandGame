@@ -26,3 +26,17 @@ offset_bottom = 614.0
 position = Vector2(200, 532.508)
 scale = Vector2(0.148438, 8.85144)
 texture = ExtResource("3_1q2pg")
+
+[node name="EditButton" type="Button" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1009.0
+offset_top = 586.0
+offset_right = 1151.0
+offset_bottom = 649.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Edit Beatmap"
+
+[connection signal="button_down" from="EditButton" to="." method="_on_edit_button_button_down"]

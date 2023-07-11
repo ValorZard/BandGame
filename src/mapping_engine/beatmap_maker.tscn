@@ -94,9 +94,20 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Export"
 
+[node name="TestButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -46.0
+offset_right = 178.0
+grow_vertical = 0
+text = "Test Beatmap"
+
 [connection signal="text_changed" from="HBoxContainer/SongLengthLineEdit" to="." method="_on_song_length_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/MeasureSubdivisionLineEdit" to="." method="_on_measure_subdivision_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/BPMLineEdit" to="." method="_on_bpm_line_edit_text_changed"]
 [connection signal="text_changed" from="TimeSignatureManager/VBoxContainer/NumbOfNotesInMeasureLineEdit" to="." method="_on_number_of_notes_in_measure_text_changed"]
 [connection signal="text_changed" from="TimeSignatureManager/VBoxContainer/NoteValueLineEdit" to="." method="_on_note_value_text_changed"]
 [connection signal="button_down" from="ExportButton" to="." method="_on_export_button_button_down"]
+[connection signal="button_down" from="TestButton" to="." method="_on_test_button_button_down"]

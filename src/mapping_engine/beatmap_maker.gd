@@ -15,6 +15,12 @@ class_name BeatmapMaker
 @export var note_value : int = 4 
 @export var length_of_note : float = 20 # how big a note is on screen
 
+# beatmap stuff
+
+@export var beatmap_file_path : StringName = "user://new_beatmap.json"
+
+@export var beatmap_player : PackedScene = load("res://src/game_engine/beatmap.tscn")
+
 var note_timeline : NoteTimeline
 
 # Called when the node enters the scene tree for the first time.
@@ -93,3 +99,13 @@ func export_beatmap():
 	print(beatmap_dictionary)
 	# Store the save dictionary as a new line in the save file.
 	beatmap_file.store_line(json_string)
+
+
+func _on_test_button_button_down():
+	# add beatmap player to root
+	var beatmap_player_instance : BeatmapPlayer = beatmap_player.instantiate()
+	print(beatmap_player_instance)
+	beatmap_player_instance.beatmap_file_path = beatmap_file_path
+	get_tree().root.add_child(beatmap_player_instance)
+	# remove self from root
+	get_tree().root.remove_child(self)

@@ -1,7 +1,8 @@
 extends Node2D
 
-var time_elapsed_since_start : float = 0
+class_name BeatmapPlayer
 
+var time_elapsed_since_start : float = 0
 
 # hit window stuff (in seconds)
 var view_window : float = 1 # from now to now + view window, thats the notes that will show
@@ -11,7 +12,10 @@ var view_window : float = 1 # from now to now + view window, thats the notes tha
 var beats_per_second : float 
 
 # actual beat map
-@export var beatmap_file_path : StringName = "res://test_map.json"
+@export var beatmap_file_path : StringName = "res://new_beatmap.json"
+
+# beatmap editor
+@export var beatmap_editor : PackedScene = load("res://src/mapping_engine/beatmap_maker.tscn")
 
 # score management:
 var score : int
@@ -117,3 +121,12 @@ func _process(delta):
 			# if its 0, its all the way to the right, and visa versa
 			var screen_position_ratio : float = (-(note[0].start_time - view_window - time_elapsed_since_start)/view_window)
 			note[1].position.x = get_viewport_rect().size.x - screen_position_ratio * get_viewport_rect().size.x + GameManager.hit_zone_left_offset
+
+
+func _on_edit_button_button_down():
+	# add beatmap player to root
+	var beatmap_editor_instance = beatmap_editor.instantiate()
+	beatmap_editor_instance.beatmap_file_path = beatmap_file_path
+	get_tree().root.add_child(beatmap_editor_instance)
+	# remove self from root
+	get_tree().root.remove_child(self)

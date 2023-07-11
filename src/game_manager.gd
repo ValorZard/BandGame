@@ -1,3 +1,5 @@
+extends Node
+
 # overall hit window
 const hit_window : float = 0.075
 
@@ -6,3 +8,5 @@ const perfect_hit_window : float = 0.01
 
 # hit zone left-x offset (px)
 const hit_zone_left_offset : int = 200
+
+var belh = 0
