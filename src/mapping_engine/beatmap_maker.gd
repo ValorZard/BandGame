@@ -15,6 +15,7 @@ class_name BeatmapMaker
 @export var note_value : int = 4 
 @export var length_of_note : float = 20 # how big a note is on screen
 
+var note_timeline : NoteTimeline
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,6 +24,7 @@ func _ready():
 	$HBoxContainer/BPMLineEdit.text = str(beats_per_minute)
 	$TimeSignatureManager/VBoxContainer/NumbOfNotesInMeasureLineEdit.text = str(number_of_notes_in_measure)
 	$TimeSignatureManager/VBoxContainer/NoteValueLineEdit.text = str(note_value)
+	note_timeline = $ScrollContainer/NoteTimeline
 	update_timeline()
 
 func update_timeline():
@@ -63,3 +65,31 @@ func _on_note_value_text_changed(new_text):
 	if new_text.is_valid_int():
 		note_value = int(new_text)
 		update_timeline()
+
+
+func _on_export_button_button_down():
+	export_beatmap()
+
+func export_beatmap():
+	var beatmap_file = FileAccess.open("user://new_beatmap.json", FileAccess.WRITE)
+	var note_array := note_timeline.note_array
+	
+	var beatmap_dictionary : Dictionary = {"notes" : []}
+	
+	for note in note_array:
+		var note_obj : RhythmGameUtils.Note = note[0]
+		# JSON provides a static method to serialized JSON string.
+		var note_name_string := ""
+		match note_obj.note_name:
+			RhythmGameUtils.NOTES.A: note_name_string = "A"
+			RhythmGameUtils.NOTES.B: note_name_string = "B"
+			RhythmGameUtils.NOTES.C: note_name_string = "C"
+			RhythmGameUtils.NOTES.D: note_name_string = "D"
+			RhythmGameUtils.NOTES.E: note_name_string = "E"
+		var note_dictionary : Dictionary = {"name" : note_name_string, "start_time" : note_obj.start_time}
+		beatmap_dictionary["notes"].append(note_dictionary)
+	
+	var json_string = JSON.stringify(beatmap_dictionary)
+	print(beatmap_dictionary)
+	# Store the save dictionary as a new line in the save file.
+	beatmap_file.store_line(json_string)

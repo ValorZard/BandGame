@@ -19,6 +19,7 @@ offset_bottom = -41.0
 grow_horizontal = 2
 grow_vertical = 2
 item_count = 4
+selected = 0
 popup/item_0/text = "A"
 popup/item_0/id = 0
 popup/item_1/text = "B"

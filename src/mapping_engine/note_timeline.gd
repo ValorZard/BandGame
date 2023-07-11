@@ -1,5 +1,7 @@
 extends TextureRect
 
+class_name NoteTimeline
+
 @export var beatmap_maker : BeatmapMaker # easy way to get reference to parent
 
 # the position of the notes should update based on the number of beat subdivisions
