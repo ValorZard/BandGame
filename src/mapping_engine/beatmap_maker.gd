@@ -27,6 +27,8 @@ var note_timeline : NoteTimeline
 
 var note_selector : PackedScene = load("res://src/mapping_engine/note_selector.tscn")
 
+const timeline_zoom : int = 100
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$HBoxContainer/SongLengthLineEdit.text = str(song_length)
@@ -40,7 +42,7 @@ func _ready():
 
 func update_timeline():
 	# set size of the note timeline
-	$ScrollContainer/NoteTimeline.custom_minimum_size.x = length_of_note * measure_subdivisions * song_length 
+	$ScrollContainer/NoteTimeline.custom_minimum_size.x = length_of_note * measure_subdivisions * song_length * timeline_zoom
 	#print("number of notes in measure: ", number_of_notes_in_measure, ", note_value: ", note_value)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

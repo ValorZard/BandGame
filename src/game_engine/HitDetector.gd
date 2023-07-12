@@ -12,7 +12,7 @@ var view_window : float = 1 # from now to now + view window, thats the notes tha
 var beats_per_second : float 
 
 # actual beat map
-@export var beatmap_file_path : StringName = "res://new_beatmap.json"
+@export var beatmap_file_path : StringName = "res://test_map.json"
 
 # beatmap editor
 @export var beatmap_editor : PackedScene = load("res://src/mapping_engine/beatmap_maker.tscn")
@@ -42,18 +42,9 @@ var note_sprite
 
 # Called when the node enters the scene tree for the first time.
 func _ready():	
-	$HitZone.position.y = GameManager.hit_zone_left_offset
-	
+	$HitZone.position.x = GameManager.hit_zone_left_offset
+	$HitZone.position.y = get_viewport_rect().size.y / 2
 	note_array = RhythmGameUtils.load_beatmap(beatmap_file_path)
-	
-#	note_array.append(Note.new(NOTES.A, 1.25))
-#	note_array.append(Note.new(NOTES.B, 1.5))
-#	note_array.append(Note.new(NOTES.C, 1.75))
-#	note_array.append(Note.new(NOTES.D, 2.0))
-
-func calculate_current_song_data():
-	# figure out what beat we're on
-	beats_per_second = beats_per_minute / 60.0
 	
 func delete_note(note_pair):
 	# Stops a note from being hit twice, removing the visual instance of a note when it is.
@@ -66,35 +57,29 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 	# go through every single note on screen and see which one is close enough to hit, and wheather it matches the note the player hit
 	for note in range(len(note_array)):
 		if !note_array[note][0].already_hit:
-			if (note_array[note][0].start_time + GameManager.hit_window) < current_time:
+			if (note_array[note][0].start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
 				# Handles ignoring notes that were missed.
-				# Note this does cause visual behavior that looks like a hit that failed to miss.
-				# If you miss the timing window, but haven't fully cleared the left edge, the note will still disappear.
+				# FIXED 07/11/22: WAIT_CLEAR is used as an offset to wait until missed notes are fully passed before visually clearing them.
 				delete_note(note_array[note])
 				
 			elif note_array[note][0].note_name == note_name:
 				var hit_result = note_array[note][0].check_hit(current_time)
 				if hit_result != RhythmGameUtils.HIT_RESULTS.NO_HIT:
 					if hit_result == RhythmGameUtils.HIT_RESULTS.PERFECT:
-						score += 1000
+						score += GameManager.PERFECT_SCORE
 					elif hit_result == RhythmGameUtils.HIT_RESULTS.HIT:
-						score += 100
+						score += GameManager.NORMAL_SCORE
+						
 					delete_note(note_array[note])
-					
 					$Score.text = str(score)
-					
 					note_array.remove_at(note)
 					
 				return
 
 
-const note_time : int = 2
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	time_elapsed_since_start += delta
-	
-	calculate_current_song_data()
 	
 	if Input.is_action_just_pressed("note1"):
 		#print("note1")
@@ -121,6 +106,10 @@ func _process(delta):
 			# if its 0, its all the way to the right, and visa versa
 			var screen_position_ratio : float = (-(note[0].start_time - view_window - time_elapsed_since_start)/view_window)
 			note[1].position.x = get_viewport_rect().size.x - screen_position_ratio * get_viewport_rect().size.x + GameManager.hit_zone_left_offset
+		
+		if note[0].start_time > time_elapsed_since_start:
+			# early exit the loop if we've hit a note that shouldn't be displayed, as we have sorted notes by time.
+			break
 
 
 func _on_edit_button_button_down():

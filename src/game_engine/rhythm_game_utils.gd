@@ -74,6 +74,9 @@ func load_beatmap(beatmap_file_path : String) -> Array:
 	else:
 		print("JSON Parse Error: ", json.get_error_message(), " in ", content, " at line ", json.get_error_line())
 	# if this somehow fails, the note array will just be empty
+	
+	# Sort note array by duration. Rest of engine assumes this to be true.
+	note_array.sort_custom(func(a, b) : return b[0].start_time > a[0].start_time)
 	return note_array
 
 func note_spawner(note_obj : RhythmGameUtils.Note):
@@ -87,7 +90,7 @@ func note_spawner(note_obj : RhythmGameUtils.Note):
 		NOTES.D: new_note.get_node("NoteLabel").text = "D"
 		NOTES.E: new_note.get_node("NoteLabel").text = "E"
 	# set correct note position (hardcoded for now)
-	new_note.position.y = 300
+	new_note.position.y = GameManager.note_vertical_offset
 	add_child(new_note)
 	
 	return [note_obj, new_note]

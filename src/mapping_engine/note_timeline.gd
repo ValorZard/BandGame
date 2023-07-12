@@ -9,9 +9,11 @@ var note_array : Array
 
 var note_selector : PackedScene = preload("res://src/mapping_engine/note_selector.tscn")
 
+var scroll : Node
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	scroll = get_parent()
 
 func _gui_input(event):
 	if event is InputEventMouseButton:
@@ -19,7 +21,9 @@ func _gui_input(event):
 			print("I've been clicked at: ", event.position)
 			# convert the position of the click to the ratio of the song by using the length of the note timeline
 			# TODO: Make it snap to grid
-			var current_position_in_song : float = (event.position.x / size.x) * beatmap_maker.song_length
+			
+			var current_position_in_song : float = (scroll.scroll_horizontal + (event.position.x / size.x)) / scroll.get_h_scroll_bar().max_value * beatmap_maker.song_length
+			
 			print("Current Song Location: ", current_position_in_song)
 			# TODO: Make it so that you can change the type of note in that location
 			var note_obj : RhythmGameUtils.Note = RhythmGameUtils.Note.new(RhythmGameUtils.NOTES.A, current_position_in_song)
