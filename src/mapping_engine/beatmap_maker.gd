@@ -43,7 +43,7 @@ func _ready():
 
 func update_timeline():
 	# set size of the note timeline
-	$ScrollContainer/NoteTimeline.custom_minimum_size.x = length_of_note * measure_subdivisions * song_length * timeline_zoom
+	$ScrollContainer/NoteTimeline.custom_minimum_size.x = length_of_note * song_length * timeline_zoom
 	#print("number of notes in measure: ", number_of_notes_in_measure, ", note_value: ", note_value)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

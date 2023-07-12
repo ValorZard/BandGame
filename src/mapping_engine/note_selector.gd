@@ -6,7 +6,7 @@ var option_button : OptionButton
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print($OptionButton.get_selected_id())
+	# print($OptionButton.get_selected_id())
 	option_button = $OptionButton
 	set_note_name()
 
@@ -23,5 +23,5 @@ func _process(delta):
 	pass
 
 func _on_option_button_item_selected(index):
-	print(index)
+	# print(index)
 	set_note_name()
