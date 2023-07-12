@@ -31,6 +31,7 @@ func _gui_input(event):
 			var current_position_in_song : float = ((scroll.scroll_horizontal / scroll.get_h_scroll_bar().max_value + event.position.x) / scroll.get_h_scroll_bar().max_value) * beatmap_maker.song_length
 			
 			# get the current measure based on the time.
+			# _s postfix in variable names indicates seconds unit.
 			var beat_length_s = (60 / beatmap_maker.beats_per_minute)
 			var measure_length_s = beat_length_s * beatmap_maker.number_of_notes_in_measure
 			var current_measure_position : float = current_position_in_song / measure_length_s

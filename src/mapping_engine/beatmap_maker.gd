@@ -2,9 +2,9 @@ extends Control
 
 class_name BeatmapMaker
 
-@export var beats_per_minute : float = 112 
+@export var beats_per_minute : float = 120 
 @export var song_length : float = 60. # in seconds
-@export var measure_subdivisions : int = 1 # how many notes fit in one measure
+@export var measure_subdivisions : int = 4 # how many notes fit in one measure
 # top part of a time signature
 # number of notes in a measure
 @export var number_of_notes_in_measure : int = 4 
@@ -12,7 +12,7 @@ class_name BeatmapMaker
 # the note value that the signature is counting. 
 # This number is always a power of 2, usually 2, 4, or 8. 
 # 2 corresponds to the half note (minim), 4 to the quarter note (crotchet), 8 to the eighth note (quaver).
-@export var note_value : int = 4 
+@export var note_value : int = 4
 @export var length_of_note : float = 20 # how big a note is on screen
 
 # beatmap stuff
@@ -27,7 +27,7 @@ var note_timeline : NoteTimeline
 
 var note_selector : PackedScene = load("res://src/mapping_engine/note_selector.tscn")
 
-var timeline_zoom : int = 3
+var timeline_zoom : int = 10
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
