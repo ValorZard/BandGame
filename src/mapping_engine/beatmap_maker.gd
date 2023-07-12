@@ -27,7 +27,7 @@ var note_timeline : NoteTimeline
 
 var note_selector : PackedScene = load("res://src/mapping_engine/note_selector.tscn")
 
-const timeline_zoom : int = 100
+var timeline_zoom : int = 3
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -36,6 +36,7 @@ func _ready():
 	$HBoxContainer/BPMLineEdit.text = str(beats_per_minute)
 	$TimeSignatureManager/VBoxContainer/NumbOfNotesInMeasureLineEdit.text = str(number_of_notes_in_measure)
 	$TimeSignatureManager/VBoxContainer/NoteValueLineEdit.text = str(note_value)
+	$HBoxContainer/ZoomEdit.text = str(timeline_zoom)
 	note_timeline = $ScrollContainer/NoteTimeline
 	update_timeline()
 	load_beatmap(beatmap_file_path)
@@ -48,7 +49,17 @@ func update_timeline():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+	
 
+func redraw_timeline():
+	for note in note_timeline.note_array:
+		note[1].position.x = (note[0].start_time / song_length) * $ScrollContainer/NoteTimeline.custom_minimum_size.x
+
+func _on_zoom_edit_text_changed(new_text):
+	if new_text.is_valid_int() and int(new_text) > 0:
+		timeline_zoom = int(new_text)
+		update_timeline()
+		redraw_timeline()
 
 func _on_song_length_line_edit_text_changed(new_text : String):
 	if new_text.is_valid_float():
@@ -79,8 +90,8 @@ func _on_note_value_text_changed(new_text):
 		note_value = int(new_text)
 		update_timeline()
 
-
 func _on_export_button_button_down():
+	note_timeline.size.x
 	export_beatmap()
 
 func export_beatmap():
@@ -153,7 +164,9 @@ func note_spawner(note_obj : RhythmGameUtils.Note):
 	note_sprite.note = note_obj
 	# set correct note position (hardcoded for now)
 	# put the note sprite on the right place in the timeline while keeping it centered
-	note_sprite.position.x = (note_obj.start_time * note_timeline.size.x) / song_length
+	
+	note_sprite.position.x = (note_obj.start_time / song_length) * $ScrollContainer/NoteTimeline.custom_minimum_size.x
+	
 	note_sprite.position.y = note_timeline.size.y / 2
 	note_timeline.add_child(note_sprite)
 	# set the correct note label
@@ -174,3 +187,6 @@ func _on_test_button_button_down():
 	get_tree().root.add_child(beatmap_player_instance)
 	# remove self from root
 	get_tree().root.remove_child(self)
+
+
+

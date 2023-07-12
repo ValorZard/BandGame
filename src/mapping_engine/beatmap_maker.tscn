@@ -53,11 +53,19 @@ text = "Beats per minute:  "
 [node name="BPMLineEdit" type="LineEdit" parent="HBoxContainer"]
 layout_mode = 2
 
+[node name="Label4" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Zoom"
+
+[node name="ZoomEdit" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+
 [node name="TimeSignatureManager" type="Control" parent="."]
 anchors_preset = 0
 offset_left = 870.0
+offset_top = 372.0
 offset_right = 910.0
-offset_bottom = 40.0
+offset_bottom = 563.0
 
 [node name="Label4" type="Label" parent="TimeSignatureManager"]
 layout_mode = 2
@@ -107,6 +115,7 @@ text = "Test Beatmap"
 [connection signal="text_changed" from="HBoxContainer/SongLengthLineEdit" to="." method="_on_song_length_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/MeasureSubdivisionLineEdit" to="." method="_on_measure_subdivision_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/BPMLineEdit" to="." method="_on_bpm_line_edit_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/ZoomEdit" to="." method="_on_zoom_edit_text_changed"]
 [connection signal="text_changed" from="TimeSignatureManager/VBoxContainer/NumbOfNotesInMeasureLineEdit" to="." method="_on_number_of_notes_in_measure_text_changed"]
 [connection signal="text_changed" from="TimeSignatureManager/VBoxContainer/NoteValueLineEdit" to="." method="_on_note_value_text_changed"]
 [connection signal="button_down" from="ExportButton" to="." method="_on_export_button_button_down"]

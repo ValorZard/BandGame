@@ -22,7 +22,9 @@ func _gui_input(event):
 			# convert the position of the click to the ratio of the song by using the length of the note timeline
 			# TODO: Make it snap to grid
 			
-			var current_position_in_song : float = (scroll.scroll_horizontal + (event.position.x / size.x)) / scroll.get_h_scroll_bar().max_value * beatmap_maker.song_length
+			
+			var current_position_in_song : float = ((scroll.scroll_horizontal / scroll.get_h_scroll_bar().max_value + event.position.x) / scroll.get_h_scroll_bar().max_value) * beatmap_maker.song_length
+			print(scroll.scroll_horizontal, ' ', scroll.get_h_scroll_bar().max_value, ' ', event.position.x, ' ', current_position_in_song)
 			
 			print("Current Song Location: ", current_position_in_song)
 			# TODO: Make it so that you can change the type of note in that location
