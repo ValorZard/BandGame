@@ -143,7 +143,9 @@ func load_beatmap(beatmap_file_path : String):
 						"D": note_name = RhythmGameUtils.NOTES.D
 						"E": note_name = RhythmGameUtils.NOTES.E
 					var note_start_time : float = note_data["start_time"]
-					note_array.append(RhythmGameUtils.Note.new(note_name, note_start_time))
+					var new_note = RhythmGameUtils.Note.new(note_name, note_start_time)
+					note_array.append(new_note)
+					#print(new_note.note_name, ",  ", new_note.start_time)
 				
 				# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
 				note_array = note_array.map(note_spawner)
@@ -159,25 +161,25 @@ func load_beatmap(beatmap_file_path : String):
 func note_spawner(note_obj : RhythmGameUtils.Note):
 	# Spawns a note sprite instance for every note object in the map array.
 	var note_sprite = note_selector.instantiate()
-	print(note_sprite.option_button)
+	#print(note_sprite.option_button)
 	# set note data
 	note_sprite.note = note_obj
 	# set correct note position (hardcoded for now)
 	# put the note sprite on the right place in the timeline while keeping it centered
 	
-	note_sprite.position.x = (note_obj.start_time / song_length) * $ScrollContainer/NoteTimeline.custom_minimum_size.x
+	note_sprite.position.x = (note_sprite.note.start_time / song_length) * $ScrollContainer/NoteTimeline.custom_minimum_size.x
 	
 	note_sprite.position.y = note_timeline.size.y / 2
 	note_timeline.add_child(note_sprite)
 	# set the correct note label
-	match note_obj.note_name:
+	match note_sprite.note.note_name:
 		RhythmGameUtils.NOTES.A: note_sprite.option_button.selected = RhythmGameUtils.NOTES.A
 		RhythmGameUtils.NOTES.B: note_sprite.option_button.selected = RhythmGameUtils.NOTES.B
 		RhythmGameUtils.NOTES.C: note_sprite.option_button.selected = RhythmGameUtils.NOTES.C
 		RhythmGameUtils.NOTES.D: note_sprite.option_button.selected = RhythmGameUtils.NOTES.D
 		RhythmGameUtils.NOTES.E: note_sprite.option_button.selected = RhythmGameUtils.NOTES.E
 	
-	return [note_obj, note_sprite]
+	return [note_sprite.note, note_sprite]
 
 func _on_test_button_button_down():
 	# add beatmap player to root

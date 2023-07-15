@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bbf7rauxpqwti"]
 
 [ext_resource type="Script" path="res://src/mapping_engine/beatmap_maker.gd" id="1_3v2b7"]
-[ext_resource type="Texture2D" uid="uid://ve52vawwxcb" path="res://assets/textures/notes/icon.svg" id="1_j8k14"]
+[ext_resource type="Texture2D" uid="uid://c2v8nak1xnxnn" path="res://assets/textures/notes/icon.svg" id="1_j8k14"]
 [ext_resource type="Script" path="res://src/mapping_engine/note_timeline.gd" id="3_h0tb7"]
 
 [node name="beatmap_maker" type="Control"]

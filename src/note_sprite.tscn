@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ty3elqaubn2j"]
 
-[ext_resource type="Texture2D" uid="uid://bgpoetwik2bo7" path="res://assets/textures/notes/noteA.png" id="1_e3rtw"]
+[ext_resource type="Texture2D" uid="uid://dgqqej1sjrn7b" path="res://assets/textures/notes/noteA.png" id="1_e3rtw"]
 
 [sub_resource type="Theme" id="Theme_hy543"]
 default_font_size = 50

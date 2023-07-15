@@ -8,7 +8,7 @@ var option_button : OptionButton
 func _ready():
 	# print($OptionButton.get_selected_id())
 	option_button = $OptionButton
-	set_note_name()
+	#set_note_name()
 
 func set_note_name():
 	match $OptionButton.get_selected_id():
