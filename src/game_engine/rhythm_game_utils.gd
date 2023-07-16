@@ -43,7 +43,7 @@ class HoldNote extends Note:
 		self.end_time = end_time
 
 # returns a note array, with each element in the array being a tuple of a note object and its sprite represenation
-func load_beatmap(beatmap_file_path : String) -> Array:
+func load_beatmap_to_play(beatmap_file_path : String) -> Array:
 	var note_array : Array
 	# file stuff
 	var file = FileAccess.open(beatmap_file_path, FileAccess.READ)

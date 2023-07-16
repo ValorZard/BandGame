@@ -44,7 +44,7 @@ var note_sprite
 func _ready():	
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
-	note_array = RhythmGameUtils.load_beatmap(beatmap_file_path)
+	note_array = RhythmGameUtils.load_beatmap_to_play(beatmap_file_path)
 	
 func delete_note(note_pair):
 	# Stops a note from being hit twice, removing the visual instance of a note when it is.

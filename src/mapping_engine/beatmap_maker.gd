@@ -41,7 +41,7 @@ func _ready():
 	$HBoxContainer/ZoomEdit.text = str(timeline_zoom)
 	note_timeline = $ScrollContainer/NoteTimeline
 	update_timeline()
-	load_beatmap(beatmap_file_path)
+	load_beatmap_to_edit(beatmap_file_path)
 
 func update_timeline():
 	# set size of the note timeline
@@ -137,7 +137,7 @@ func export_beatmap():
 	beatmap_file.store_line(json_string)
 
 # returns a note array, with each element in the array being a tuple of a note object and its sprite represenation
-func load_beatmap(beatmap_file_path : String):
+func load_beatmap_to_edit(beatmap_file_path : String):
 	var note_array : Array
 	# file stuff
 	var file = FileAccess.open(beatmap_file_path, FileAccess.READ)
