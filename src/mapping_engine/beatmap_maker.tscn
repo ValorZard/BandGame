@@ -27,6 +27,8 @@ texture = ExtResource("1_j8k14")
 script = ExtResource("3_h0tb7")
 beatmap_maker = NodePath("../..")
 
+[node name="Formatting" type="Node" parent="ScrollContainer/NoteTimeline"]
+
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_right = 40.0

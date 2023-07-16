@@ -9,12 +9,12 @@ var note_array : Array
 
 var note_selector : PackedScene = preload("res://src/mapping_engine/note_selector.tscn")
 
-var scroll : Node
+var scroll : ScrollContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	scroll = get_parent()
-	
+
 func snap_to_subdivision(measure_percent : float) -> float:
 	for i in range(beatmap_maker.measure_subdivisions, -1, -1):
 		if measure_percent >= (float(i) / beatmap_maker.measure_subdivisions):

@@ -21,6 +21,8 @@ class_name BeatmapMaker
 
 @export var beatmap_player : PackedScene = load("res://src/game_engine/beatmap.tscn")
 
+@export var measure_bar : PackedScene = preload("res://src/mapping_engine/measure_bar.tscn")
+
 # note timelien
 
 var note_timeline : NoteTimeline
@@ -44,7 +46,22 @@ func _ready():
 func update_timeline():
 	# set size of the note timeline
 	$ScrollContainer/NoteTimeline.custom_minimum_size.x = length_of_note * song_length * timeline_zoom
-	#print("number of notes in measure: ", number_of_notes_in_measure, ", note_value: ", note_value)
+	# clear out previous formatting
+#	for node in $ScrollContainer/NoteTimeline.get_children():
+#		if node.is_in_group("formatting"):
+#			node.queue_free()
+	# put out measure bars
+	var beats_per_second : float = beats_per_minute / 60.0
+	print(beats_per_second)
+	var number_of_measures_in_song : float = song_length / beats_per_second
+	
+	var i = 0
+#	while (i < number_of_measures_in_song):
+#		var measure_bar_instance := measure_bar.instantiate()
+#		measure_bar_instance.position.x = (i * length_of_note * timeline_zoom)
+#		measure_bar_instance.add_to_group("formatting")
+#		$ScrollContainer/NoteTimeline.add_child(measure_bar_instance)
+#		i += 1
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -76,6 +93,7 @@ func _on_measure_subdivision_line_edit_text_changed(new_text):
 func _on_bpm_line_edit_text_changed(new_text):
 	if new_text.is_valid_float():
 		beats_per_minute = float(new_text)
+		print(beats_per_minute)
 		update_timeline()
 
 

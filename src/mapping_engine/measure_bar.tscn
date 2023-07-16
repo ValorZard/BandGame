@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3kp5swekynjn"]
+
+[ext_resource type="Texture2D" uid="uid://cmvxhynvubwrn" path="res://icon.svg" id="1_nurlc"]
+
+[node name="measure_bar" type="TextureRect"]
+modulate = Color(0, 0, 0, 1)
+offset_right = 128.0
+offset_bottom = 128.0
+scale = Vector2(0.1, 5)
+texture = ExtResource("1_nurlc")

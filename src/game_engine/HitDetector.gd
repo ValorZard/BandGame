@@ -118,5 +118,8 @@ func _on_edit_button_button_down():
 	beatmap_editor_instance.beatmap_file_path = beatmap_file_path
 	#beatmap_editor_instance.load_beatmap(beatmap_file_path)
 	get_tree().root.add_child(beatmap_editor_instance)
+	# really weird workaround for visual bug
+	for node in RhythmGameUtils.get_children():
+		node.queue_free()
 	# remove self from root
 	get_tree().root.remove_child(self)
