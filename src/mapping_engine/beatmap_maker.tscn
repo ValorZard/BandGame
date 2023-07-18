@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbf7rauxpqwti"]
+[gd_scene load_steps=5 format=3 uid="uid://bbf7rauxpqwti"]
 
 [ext_resource type="Script" path="res://src/mapping_engine/beatmap_maker.gd" id="1_3v2b7"]
 [ext_resource type="Texture2D" uid="uid://c2v8nak1xnxnn" path="res://assets/textures/notes/icon.svg" id="1_j8k14"]
 [ext_resource type="Script" path="res://src/mapping_engine/note_timeline.gd" id="3_h0tb7"]
+[ext_resource type="AudioStream" uid="uid://cydxhy28r24a1" path="res://assets/audio/MUSCMisc_Metronome a 120bpm (ID 0468)_BSB.wav" id="4_c6xe5"]
 
 [node name="beatmap_maker" type="Control"]
 layout_mode = 3
@@ -114,6 +115,20 @@ offset_right = 178.0
 grow_vertical = 0
 text = "Test Beatmap"
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_c6xe5")
+
+[node name="PlayButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -273.0
+offset_right = 81.0
+offset_bottom = -242.0
+grow_vertical = 0
+text = "Play song"
+
 [connection signal="text_changed" from="HBoxContainer/SongLengthLineEdit" to="." method="_on_song_length_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/MeasureSubdivisionLineEdit" to="." method="_on_measure_subdivision_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/BPMLineEdit" to="." method="_on_bpm_line_edit_text_changed"]
@@ -122,3 +137,4 @@ text = "Test Beatmap"
 [connection signal="text_changed" from="TimeSignatureManager/VBoxContainer/NoteValueLineEdit" to="." method="_on_note_value_text_changed"]
 [connection signal="button_down" from="ExportButton" to="." method="_on_export_button_button_down"]
 [connection signal="button_down" from="TestButton" to="." method="_on_test_button_button_down"]
+[connection signal="button_down" from="PlayButton" to="." method="_on_play_button_button_down"]

@@ -31,6 +31,9 @@ var note_selector : PackedScene = load("res://src/mapping_engine/note_selector.t
 
 var timeline_zoom : int = 10
 
+# music file
+var path_to_music_file : StringName 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$HBoxContainer/SongLengthLineEdit.text = str(song_length)
@@ -42,6 +45,8 @@ func _ready():
 	note_timeline = $ScrollContainer/NoteTimeline
 	update_timeline()
 	load_beatmap_to_edit(beatmap_file_path)
+	# make sure to run this after loading beatmap
+	
 
 func update_timeline():
 	# set size of the note timeline
@@ -65,7 +70,9 @@ func update_timeline():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	# scroll the timeline if a song is playing
+	if $AudioStreamPlayer.playing:
+		$ScrollContainer.set_h_scroll($ScrollContainer.get_h_scroll() + int(delta * length_of_note * timeline_zoom))
 	
 
 func redraw_timeline():
@@ -151,6 +158,8 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 			var data_received = json.data
 			if typeof(data_received) == TYPE_DICTIONARY:
 				# actually convert our json data into usable beatmap data
+				path_to_music_file = data_received["music-file"]
+				print(path_to_music_file)
 				for note_data in data_received["notes"]:
 					# parse each note and convert into actual note object
 					var note_name : RhythmGameUtils.NOTES
@@ -208,5 +217,7 @@ func _on_test_button_button_down():
 	# remove self from root
 	get_tree().root.remove_child(self)
 
-
-
+func _on_play_button_button_down():
+	$AudioStreamPlayer.play()
+	# start playing the timeline from the start
+	$ScrollContainer.set_h_scroll(0)
