@@ -31,6 +31,8 @@ var note_selector : PackedScene = load("res://src/mapping_engine/note_selector.t
 
 var timeline_zoom : int = 10
 
+var time_elapsed : float = 0 # keeps track of song playing
+
 # music file
 var path_to_music_file : StringName 
 
@@ -69,11 +71,12 @@ func update_timeline():
 #		i += 1
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta : float):
 	# scroll the timeline if a song is playing
 	if $AudioStreamPlayer.playing:
-		$ScrollContainer.set_h_scroll($ScrollContainer.get_h_scroll() + int(delta * length_of_note * timeline_zoom))
-	
+		$ScrollContainer.set_h_scroll($ScrollContainer.get_h_scroll() + (delta * length_of_note * timeline_zoom))
+		time_elapsed += delta
+		$PlaySongContainer/PlaySongLabel.text = str(time_elapsed)
 
 func redraw_timeline():
 	for note in note_timeline.note_array:
@@ -221,3 +224,4 @@ func _on_play_button_button_down():
 	$AudioStreamPlayer.play()
 	# start playing the timeline from the start
 	$ScrollContainer.set_h_scroll(0)
+	time_elapsed = 0
