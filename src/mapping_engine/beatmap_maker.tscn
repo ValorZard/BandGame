@@ -118,16 +118,18 @@ text = "Test Beatmap"
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_c6xe5")
 
-[node name="PlayButton" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -273.0
-offset_right = 81.0
-offset_bottom = -242.0
-grow_vertical = 0
+[node name="PlaySongContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 375.0
+offset_right = 40.0
+offset_bottom = 415.0
+
+[node name="PlayButton" type="Button" parent="PlaySongContainer"]
+layout_mode = 2
 text = "Play song"
+
+[node name="PlaySongLabel" type="Label" parent="PlaySongContainer"]
+layout_mode = 2
 
 [connection signal="text_changed" from="HBoxContainer/SongLengthLineEdit" to="." method="_on_song_length_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/MeasureSubdivisionLineEdit" to="." method="_on_measure_subdivision_line_edit_text_changed"]
@@ -137,4 +139,4 @@ text = "Play song"
 [connection signal="text_changed" from="TimeSignatureManager/VBoxContainer/NoteValueLineEdit" to="." method="_on_note_value_text_changed"]
 [connection signal="button_down" from="ExportButton" to="." method="_on_export_button_button_down"]
 [connection signal="button_down" from="TestButton" to="." method="_on_test_button_button_down"]
-[connection signal="button_down" from="PlayButton" to="." method="_on_play_button_button_down"]
+[connection signal="button_down" from="PlaySongContainer/PlayButton" to="." method="_on_play_button_button_down"]

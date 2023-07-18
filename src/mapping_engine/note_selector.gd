@@ -8,9 +8,11 @@ var option_button : OptionButton
 func _ready():
 	# print($OptionButton.get_selected_id())
 	option_button = $OptionButton
-	#set_note_name()
+	if note:
+		$Label.text = str(note.start_time)
 
 func set_note_name():
+	$Label.text = str(note.start_time)
 	match $OptionButton.get_selected_id():
 		RhythmGameUtils.NOTES.A: note.note_name = RhythmGameUtils.NOTES.A
 		RhythmGameUtils.NOTES.B: note.note_name = RhythmGameUtils.NOTES.B
