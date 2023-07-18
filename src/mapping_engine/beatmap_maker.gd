@@ -76,7 +76,8 @@ func _process(delta : float):
 	if $AudioStreamPlayer.playing:
 		time_elapsed += delta
 		$ScrollContainer.set_h_scroll(time_elapsed * length_of_note * timeline_zoom)
-		$PlaySongContainer/PlaySongLabel.text = str(time_elapsed)
+		# string formatting
+		$PlaySongContainer/PlaySongLabel.text = "%10.1f" % time_elapsed
 
 func redraw_timeline():
 	for note in note_timeline.note_array:
@@ -225,3 +226,7 @@ func _on_play_button_button_down():
 	# start playing the timeline from the start
 	$ScrollContainer.set_h_scroll(0)
 	time_elapsed = 0
+
+
+func _on_stop_button_button_down():
+	$AudioStreamPlayer.stop()

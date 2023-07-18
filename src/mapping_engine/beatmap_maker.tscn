@@ -126,10 +126,15 @@ offset_bottom = 415.0
 
 [node name="PlayButton" type="Button" parent="PlaySongContainer"]
 layout_mode = 2
-text = "Play song"
+text = "Play Song"
 
 [node name="PlaySongLabel" type="Label" parent="PlaySongContainer"]
 layout_mode = 2
+horizontal_alignment = 1
+
+[node name="StopButton" type="Button" parent="PlaySongContainer"]
+layout_mode = 2
+text = "Stop Song"
 
 [connection signal="text_changed" from="HBoxContainer/SongLengthLineEdit" to="." method="_on_song_length_line_edit_text_changed"]
 [connection signal="text_changed" from="HBoxContainer/MeasureSubdivisionLineEdit" to="." method="_on_measure_subdivision_line_edit_text_changed"]
@@ -140,3 +145,4 @@ layout_mode = 2
 [connection signal="button_down" from="ExportButton" to="." method="_on_export_button_button_down"]
 [connection signal="button_down" from="TestButton" to="." method="_on_test_button_button_down"]
 [connection signal="button_down" from="PlaySongContainer/PlayButton" to="." method="_on_play_button_button_down"]
+[connection signal="button_down" from="PlaySongContainer/StopButton" to="." method="_on_stop_button_button_down"]
