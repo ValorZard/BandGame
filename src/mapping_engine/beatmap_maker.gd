@@ -74,8 +74,8 @@ func update_timeline():
 func _process(delta : float):
 	# scroll the timeline if a song is playing
 	if $AudioStreamPlayer.playing:
-		$ScrollContainer.set_h_scroll($ScrollContainer.get_h_scroll() + (delta * length_of_note * timeline_zoom))
 		time_elapsed += delta
+		$ScrollContainer.set_h_scroll(time_elapsed * length_of_note * timeline_zoom)
 		$PlaySongContainer/PlaySongLabel.text = str(time_elapsed)
 
 func redraw_timeline():
