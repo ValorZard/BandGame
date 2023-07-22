@@ -34,7 +34,7 @@ var timeline_zoom : int = 10
 var time_elapsed : float = 0 # keeps track of song playing
 
 # music file
-var path_to_music_file : StringName 
+var path_to_music_file : StringName = "res://assets/audio/MUSCMisc_Metronome a 120bpm (ID 0468)_BSB.wav"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -127,7 +127,7 @@ func export_beatmap():
 	var beatmap_file = FileAccess.open(beatmap_file_path, FileAccess.WRITE)
 	var note_array := note_timeline.note_array
 	
-	var beatmap_dictionary : Dictionary = {"notes" : []}
+	var beatmap_dictionary : Dictionary = {"music-file" : path_to_music_file, "notes" : []}
 	
 	for note in note_array:
 		var note_obj : RhythmGameUtils.Note = note[0]
