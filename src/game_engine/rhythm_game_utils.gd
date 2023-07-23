@@ -65,10 +65,13 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array:
 					"D": note_name = NOTES.D
 					"E": note_name = NOTES.E
 				var note_start_time : float = note_data["start_time"]
-				note_array.append(RhythmGameUtils.Note.new(note_name, note_start_time))
+				
+				# Offset is baked at runtime for the player.
+				note_array.append(RhythmGameUtils.Note.new(note_name, note_start_time + data_received["offset"]))
 			
 			# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
 			note_array = note_array.map(note_spawner)
+			
 		else:
 			print("Unexpected data")
 	else:

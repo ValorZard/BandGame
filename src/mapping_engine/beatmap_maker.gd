@@ -32,6 +32,8 @@ var note_selector : PackedScene = load("res://src/mapping_engine/note_selector.t
 var timeline_zoom : int = 10
 
 var time_elapsed : float = 0 # keeps track of song playing
+
+# offset in mapping changes when the audio file plays back.
 var time_offset_ms : float = 0
 
 # music file
@@ -127,18 +129,18 @@ func _on_export_button_button_down():
 	
 func _on_time_offset_text_changed(new_text):
 	if new_text.is_valid_float():
-		for note in note_timeline.note_array:
-			note[0].start_time -= time_offset_ms * 0.001
-			note[0].start_time += time_offset_ms * 0.001
+		#for note in note_timeline.note_array:
+		#	note[0].start_time -= time_offset_ms * 0.001
+		#	note[0].start_time += time_offset_ms * 0.001
 		
 		time_offset_ms = float(new_text)
-		update_timeline()
+		#update_timeline()
 
 func export_beatmap():
 	var beatmap_file = FileAccess.open(beatmap_file_path, FileAccess.WRITE)
 	var note_array := note_timeline.note_array
 	
-	var beatmap_dictionary : Dictionary = {"music-file" : path_to_music_file, "notes" : []}
+	var beatmap_dictionary : Dictionary = {"music-file" : path_to_music_file, "offset" : time_offset_ms, "notes" : []}
 	
 	for note in note_array:
 		var note_obj : RhythmGameUtils.Note = note[0]
@@ -174,6 +176,7 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 			if typeof(data_received) == TYPE_DICTIONARY:
 				# actually convert our json data into usable beatmap data
 				path_to_music_file = data_received["music-file"]
+				time_offset_ms = data_received["time-offset-ms"]
 				print(path_to_music_file)
 				for note_data in data_received["notes"]:
 					# parse each note and convert into actual note object

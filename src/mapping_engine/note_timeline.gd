@@ -48,7 +48,7 @@ func _gui_input(event):
 				return
 			raw_note_times[current_position_in_song] = true
 			
-			current_position_in_song += (beatmap_maker.time_offset_ms * 0.001)
+			#current_position_in_song += (beatmap_maker.time_offset_ms * 0.001)
 			
 			print(current_position_in_song, ' ', time_offset_s)
 			

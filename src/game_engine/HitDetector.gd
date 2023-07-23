@@ -7,7 +7,7 @@ var time_elapsed_since_start : float = 0
 # hit window stuff (in seconds)
 var view_window : float = 1 # from now to now + view window, thats the notes that will show
 
-# note management
+# note managements
 @export var note_array : Array
 var beats_per_second : float 
 
