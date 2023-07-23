@@ -32,6 +32,7 @@ var note_selector : PackedScene = load("res://src/mapping_engine/note_selector.t
 var timeline_zoom : int = 10
 
 var time_elapsed : float = 0 # keeps track of song playing
+var time_offset_ms : float = 0
 
 # music file
 var path_to_music_file : StringName = "res://assets/audio/MUSCMisc_Metronome a 120bpm (ID 0468)_BSB.wav"
@@ -44,6 +45,7 @@ func _ready():
 	$TimeSignatureManager/VBoxContainer/NumbOfNotesInMeasureLineEdit.text = str(number_of_notes_in_measure)
 	$TimeSignatureManager/VBoxContainer/NoteValueLineEdit.text = str(note_value)
 	$HBoxContainer/ZoomEdit.text = str(timeline_zoom)
+	$HBoxContainer/TimeOffset.text = str(time_offset_ms)
 	note_timeline = $ScrollContainer/NoteTimeline
 	update_timeline()
 	load_beatmap_to_edit(beatmap_file_path)
@@ -122,6 +124,15 @@ func _on_note_value_text_changed(new_text):
 func _on_export_button_button_down():
 	note_timeline.size.x
 	export_beatmap()
+	
+func _on_time_offset_text_changed(new_text):
+	if new_text.is_valid_float():
+		for note in note_timeline.note_array:
+			note[0].start_time -= time_offset_ms * 0.001
+			note[0].start_time += time_offset_ms * 0.001
+		
+		time_offset_ms = float(new_text)
+		update_timeline()
 
 func export_beatmap():
 	var beatmap_file = FileAccess.open(beatmap_file_path, FileAccess.WRITE)
@@ -230,3 +241,6 @@ func _on_play_button_button_down():
 
 func _on_stop_button_button_down():
 	$AudioStreamPlayer.stop()
+
+
+

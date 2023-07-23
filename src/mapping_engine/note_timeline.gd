@@ -11,6 +11,8 @@ var note_selector : PackedScene = preload("res://src/mapping_engine/note_selecto
 
 var scroll : ScrollContainer
 
+var raw_note_times : Dictionary = {}
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	scroll = get_parent()
@@ -41,6 +43,13 @@ func _gui_input(event):
 			var time_offset_s = snapped_measure_percent * measure_length_s
 						
 			current_position_in_song = floor(current_measure_position) * measure_length_s + time_offset_s
+			
+			if current_position_in_song in raw_note_times.keys():
+				return
+			raw_note_times[current_position_in_song] = true
+			
+			current_position_in_song += (beatmap_maker.time_offset_ms * 0.001)
+			
 			print(current_position_in_song, ' ', time_offset_s)
 			
 			print("Current Song Location: ", current_position_in_song)
