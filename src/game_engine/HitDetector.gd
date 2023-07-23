@@ -20,6 +20,9 @@ var beats_per_second : float
 # score management:
 var score : int
 
+# audio stuff:
+@export var audio_offset_s : float = 0.0
+
 # visual stuff
 # ---------------
 # don't check at just beat, because each beat is a measure, you want subdivisions
@@ -45,7 +48,7 @@ func _ready():
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
 	note_array = RhythmGameUtils.load_beatmap_to_play(beatmap_file_path)
-	
+
 func delete_note(note_pair):
 	# Stops a note from being hit twice, removing the visual instance of a note when it is.
 	note_pair[0].already_hit = true
@@ -80,6 +83,9 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	time_elapsed_since_start += delta
+	
+	if time_elapsed_since_start >= audio_offset_s and !$AudioStreamPlayer.playing:
+		$AudioStreamPlayer.play()
 	
 	if Input.is_action_just_pressed("note1"):
 		#print("note1")
