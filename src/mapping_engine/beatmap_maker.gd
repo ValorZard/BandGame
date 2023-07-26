@@ -206,6 +206,8 @@ func note_spawner(note_obj : RhythmGameUtils.Note):
 	#print(note_sprite.option_button)
 	# set note data
 	note_sprite.note = note_obj
+	# set up note sprite signals
+	note_sprite.note_deleted.connect(note_timeline.delete_note)
 	# set correct note position (hardcoded for now)
 	# put the note sprite on the right place in the timeline while keeping it centered
 	

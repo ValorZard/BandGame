@@ -1,8 +1,10 @@
-extends Sprite2D
+extends TextureRect
 
 var note : RhythmGameUtils.Note
 
 var option_button : OptionButton
+
+signal note_deleted(note_obj, note_sprite)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,6 +25,12 @@ func set_note_name():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
+func _gui_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			emit_signal("note_deleted", note, self)
+			self.queue_free()
 
 func _on_option_button_item_selected(index):
 	# print(index)
