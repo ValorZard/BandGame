@@ -140,7 +140,7 @@ func export_beatmap():
 	var beatmap_file = FileAccess.open(beatmap_file_path, FileAccess.WRITE)
 	var note_array := note_timeline.note_array
 	
-	var beatmap_dictionary : Dictionary = {"music-file" : path_to_music_file, "offset" : time_offset_ms, "notes" : []}
+	var beatmap_dictionary : Dictionary = {"music-file" : path_to_music_file, "time-offset-ms" : time_offset_ms, "notes" : []}
 	
 	for note in note_array:
 		var note_obj : RhythmGameUtils.Note = note[0]
@@ -191,7 +191,7 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 					var new_note = RhythmGameUtils.Note.new(note_name, note_start_time)
 					note_array.append(new_note)
 					#print(new_note.note_name, ",  ", new_note.start_time)
-				
+					note_timeline.raw_note_times[new_note.start_time] = true
 				# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
 				note_array = note_array.map(note_spawner)
 			else:

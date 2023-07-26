@@ -44,7 +44,9 @@ func _gui_input(event):
 						
 			current_position_in_song = floor(current_measure_position) * measure_length_s + time_offset_s
 			
+			# add current song position in note times to make sure you cant have overlapping notes
 			if current_position_in_song in raw_note_times.keys():
+				print("can't put a note here")
 				return
 			raw_note_times[current_position_in_song] = true
 			
@@ -67,9 +69,10 @@ func _gui_input(event):
 			add_child(note_sprite)
 			note_array.append([note_obj, note_sprite])
 
-func delete_note(note_obj, note_sprite):
+func delete_note(note_obj : RhythmGameUtils.Note, note_sprite):
 	# remove note from note array
 	note_array.erase([note_obj, note_sprite])
+	raw_note_times.erase(note_obj.start_time)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
