@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DeltascriptEvent" load_steps=2 format=3 uid="uid://bek55e71ymqp4"]
+
+[ext_resource type="Script" path="res://addons/deltascript/event/deltascript_event.gd" id="1_7ldfd"]
+
+[resource]
+script = ExtResource("1_7ldfd")
+event_script = "#char TestSpeaker
+Yo yo it is me
+
+#char AnotherGuy
+Yo yo it is me but again"
+cached_resources = Array[Resource("res://addons/deltascript/event/deltascript_event_cached_resource.gd")]([])
+cached_nodes = Array[Resource("res://addons/deltascript/event/deltascript_event_cached_node.gd")]([])
