@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/game_engine/HitDetector.gd" id="1_ehuh6"]
 [ext_resource type="Texture2D" uid="uid://cmvxhynvubwrn" path="res://icon.svg" id="3_1q2pg"]
-[ext_resource type="AudioStream" uid="uid://cydxhy28r24a1" path="res://assets/audio/MUSCMisc_Metronome a 120bpm (ID 0468)_BSB.wav" id="3_nvfdh"]
+[ext_resource type="AudioStream" uid="uid://6r33ppfe6njj" path="res://assets/audio/assets_audio_MUSCMisc_Metronome_a_120bpm_ID_0468_BSB_consolidated.wav" id="3_vw451"]
 
 [node name="HitDetector" type="Node2D"]
 script = ExtResource("1_ehuh6")
@@ -40,6 +40,6 @@ grow_vertical = 2
 text = "Edit Beatmap"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_nvfdh")
+stream = ExtResource("3_vw451")
 
 [connection signal="button_down" from="EditButton" to="." method="_on_edit_button_button_down"]

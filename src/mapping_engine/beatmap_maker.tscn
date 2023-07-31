@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/mapping_engine/beatmap_maker.gd" id="1_3v2b7"]
 [ext_resource type="Texture2D" uid="uid://c2v8nak1xnxnn" path="res://assets/textures/notes/icon.svg" id="1_j8k14"]
 [ext_resource type="Script" path="res://src/mapping_engine/note_timeline.gd" id="3_h0tb7"]
-[ext_resource type="AudioStream" uid="uid://cydxhy28r24a1" path="res://assets/audio/MUSCMisc_Metronome a 120bpm (ID 0468)_BSB.wav" id="4_c6xe5"]
+[ext_resource type="AudioStream" uid="uid://6r33ppfe6njj" path="res://assets/audio/assets_audio_MUSCMisc_Metronome_a_120bpm_ID_0468_BSB_consolidated.wav" id="4_tyxib"]
 
 [node name="beatmap_maker" type="Control"]
 layout_mode = 3
@@ -123,7 +123,7 @@ grow_vertical = 0
 text = "Test Beatmap"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_c6xe5")
+stream = ExtResource("4_tyxib")
 
 [node name="PlaySongContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
