@@ -26,13 +26,13 @@ grow_horizontal = 2
 grow_vertical = 2
 item_count = 4
 selected = 0
-popup/item_0/text = "A"
+popup/item_0/text = "D"
 popup/item_0/id = 0
-popup/item_1/text = "B"
+popup/item_1/text = "F"
 popup/item_1/id = 1
-popup/item_2/text = "C"
+popup/item_2/text = "J"
 popup/item_2/id = 2
-popup/item_3/text = "D"
+popup/item_3/text = "K"
 popup/item_3/id = 3
 
 [node name="Label" type="Label" parent="."]

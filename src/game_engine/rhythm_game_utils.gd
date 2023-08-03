@@ -4,7 +4,8 @@ extends Node
 # duration of a note doesnt matter
 enum NOTE_TYPES {NORMAL, HOLD}
 # sorta analagous to actual notes (B, C, C#, etc)
-enum NOTES {A, B, C, D, E}
+# Convert to the actual keys needing to be pressed
+enum NOTES {NOTE1, NOTE2, NOTE3, NOTE4}
 
 enum HIT_RESULTS {NO_HIT, HIT, PERFECT}
 
@@ -59,11 +60,10 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array:
 				# parse each note and convert into actual note object
 				var note_name : RhythmGameUtils.NOTES
 				match note_data["name"]:
-					"A": note_name = NOTES.A
-					"B": note_name = NOTES.B
-					"C": note_name = NOTES.C
-					"D": note_name = NOTES.D
-					"E": note_name = NOTES.E
+					"1": note_name = NOTES.NOTE1
+					"2": note_name = NOTES.NOTE2
+					"3": note_name = NOTES.NOTE3
+					"4": note_name = NOTES.NOTE4
 				var note_start_time : float = note_data["start_time"]
 				
 				# Offset is baked at runtime for the player.
@@ -87,11 +87,10 @@ func note_spawner(note_obj : RhythmGameUtils.Note):
 	var new_note = note_sprite.instantiate()
 	# set the correct note label
 	match note_obj.note_name:
-		NOTES.A: new_note.get_node("NoteLabel").text = "A"
-		NOTES.B: new_note.get_node("NoteLabel").text = "B"
-		NOTES.C: new_note.get_node("NoteLabel").text = "C"
-		NOTES.D: new_note.get_node("NoteLabel").text = "D"
-		NOTES.E: new_note.get_node("NoteLabel").text = "E"
+		NOTES.NOTE1: new_note.get_node("NoteLabel").text = "D"
+		NOTES.NOTE2: new_note.get_node("NoteLabel").text = "F"
+		NOTES.NOTE3: new_note.get_node("NoteLabel").text = "J"
+		NOTES.NOTE4: new_note.get_node("NoteLabel").text = "K"
 	# set correct note position (hardcoded for now)
 	new_note.position.y = GameManager.note_vertical_offset
 	add_child(new_note)

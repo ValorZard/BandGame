@@ -56,7 +56,7 @@ func _gui_input(event):
 			
 			print("Current Song Location: ", current_position_in_song)
 			# TODO: Make it so that you can change the type of note in that location
-			var note_obj : RhythmGameUtils.Note = RhythmGameUtils.Note.new(RhythmGameUtils.NOTES.A, current_position_in_song)
+			var note_obj : RhythmGameUtils.Note = RhythmGameUtils.Note.new(RhythmGameUtils.NOTES.NOTE1, current_position_in_song)
 			var note_sprite := note_selector.instantiate()
 			# add note object to sprite
 			note_sprite.note = note_obj

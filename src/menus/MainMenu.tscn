@@ -46,6 +46,10 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Play!"
 
+[node name="CreateButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Create Beatmap"
+
 [node name="OptionsButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3

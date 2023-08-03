@@ -16,11 +16,10 @@ func _ready():
 func set_note_name():
 	$Label.text = str(note.start_time)
 	match $OptionButton.get_selected_id():
-		RhythmGameUtils.NOTES.A: note.note_name = RhythmGameUtils.NOTES.A
-		RhythmGameUtils.NOTES.B: note.note_name = RhythmGameUtils.NOTES.B
-		RhythmGameUtils.NOTES.C: note.note_name = RhythmGameUtils.NOTES.C
-		RhythmGameUtils.NOTES.D: note.note_name = RhythmGameUtils.NOTES.D
-		RhythmGameUtils.NOTES.E: note.note_name = RhythmGameUtils.NOTES.E
+		RhythmGameUtils.NOTES.NOTE1: note.note_name = RhythmGameUtils.NOTES.NOTE1
+		RhythmGameUtils.NOTES.NOTE2: note.note_name = RhythmGameUtils.NOTES.NOTE2
+		RhythmGameUtils.NOTES.NOTE3: note.note_name = RhythmGameUtils.NOTES.NOTE3
+		RhythmGameUtils.NOTES.NOTE4: note.note_name = RhythmGameUtils.NOTES.NOTE4
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

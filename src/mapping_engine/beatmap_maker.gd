@@ -146,12 +146,12 @@ func export_beatmap():
 		var note_obj : RhythmGameUtils.Note = note[0]
 		# JSON provides a static method to serialized JSON string.
 		var note_name_string := ""
+		# represent notes as the actual keys on the keyboard your hitting
 		match note_obj.note_name:
-			RhythmGameUtils.NOTES.A: note_name_string = "A"
-			RhythmGameUtils.NOTES.B: note_name_string = "B"
-			RhythmGameUtils.NOTES.C: note_name_string = "C"
-			RhythmGameUtils.NOTES.D: note_name_string = "D"
-			RhythmGameUtils.NOTES.E: note_name_string = "E"
+			RhythmGameUtils.NOTES.NOTE1: note_name_string = "1"
+			RhythmGameUtils.NOTES.NOTE2: note_name_string = "2"
+			RhythmGameUtils.NOTES.NOTE3: note_name_string = "3"
+			RhythmGameUtils.NOTES.NOTE4: note_name_string = "4"
 		var note_dictionary : Dictionary = {"name" : note_name_string, "start_time" : note_obj.start_time}
 		beatmap_dictionary["notes"].append(note_dictionary)
 	
@@ -182,11 +182,10 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 					# parse each note and convert into actual note object
 					var note_name : RhythmGameUtils.NOTES
 					match note_data["name"]:
-						"A": note_name = RhythmGameUtils.NOTES.A
-						"B": note_name = RhythmGameUtils.NOTES.B
-						"C": note_name = RhythmGameUtils.NOTES.C
-						"D": note_name = RhythmGameUtils.NOTES.D
-						"E": note_name = RhythmGameUtils.NOTES.E
+						"1": note_name = RhythmGameUtils.NOTES.NOTE1
+						"2": note_name = RhythmGameUtils.NOTES.NOTE2
+						"3": note_name = RhythmGameUtils.NOTES.NOTE3
+						"4": note_name = RhythmGameUtils.NOTES.NOTE4
 					var note_start_time : float = note_data["start_time"]
 					var new_note = RhythmGameUtils.Note.new(note_name, note_start_time)
 					note_array.append(new_note)
@@ -220,11 +219,10 @@ func note_spawner(note_obj : RhythmGameUtils.Note):
 	note_timeline.add_child(note_sprite)
 	# set the correct note label
 	match note_sprite.note.note_name:
-		RhythmGameUtils.NOTES.A: note_sprite.option_button.selected = RhythmGameUtils.NOTES.A
-		RhythmGameUtils.NOTES.B: note_sprite.option_button.selected = RhythmGameUtils.NOTES.B
-		RhythmGameUtils.NOTES.C: note_sprite.option_button.selected = RhythmGameUtils.NOTES.C
-		RhythmGameUtils.NOTES.D: note_sprite.option_button.selected = RhythmGameUtils.NOTES.D
-		RhythmGameUtils.NOTES.E: note_sprite.option_button.selected = RhythmGameUtils.NOTES.E
+		RhythmGameUtils.NOTES.NOTE1: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE1
+		RhythmGameUtils.NOTES.NOTE2: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE2
+		RhythmGameUtils.NOTES.NOTE3: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE3
+		RhythmGameUtils.NOTES.NOTE4: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE4
 	
 	return [note_sprite.note, note_sprite]
 

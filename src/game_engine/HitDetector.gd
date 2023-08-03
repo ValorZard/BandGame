@@ -91,16 +91,16 @@ func _process(delta):
 		#print("note1")
 		# we want to calculate the time missed by to make the note perfect
 		# we want to center the note in the middle of the beat
-		hit_note(RhythmGameUtils.NOTES.A, note_array, time_elapsed_since_start)
+		hit_note(RhythmGameUtils.NOTES.NOTE1, note_array, time_elapsed_since_start)
 	if Input.is_action_just_pressed("note2"):
 		#print("note2")
-		hit_note(RhythmGameUtils.NOTES.B, note_array, time_elapsed_since_start)
+		hit_note(RhythmGameUtils.NOTES.NOTE2, note_array, time_elapsed_since_start)
 	if Input.is_action_just_pressed("note3"):
 		#print("note3")
-		hit_note(RhythmGameUtils.NOTES.C, note_array, time_elapsed_since_start)
+		hit_note(RhythmGameUtils.NOTES.NOTE3, note_array, time_elapsed_since_start)
 	if Input.is_action_just_pressed("note4"):
 		#print("note4")
-		hit_note(RhythmGameUtils.NOTES.D, note_array, time_elapsed_since_start)
+		hit_note(RhythmGameUtils.NOTES.NOTE4, note_array, time_elapsed_since_start)
 	
 	# visual stuff
 	

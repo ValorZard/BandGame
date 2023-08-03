@@ -4,12 +4,16 @@ extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$VBoxContainer/PlayButton.connect("button_up", play_game)
+	$VBoxContainer/CreateButton.connect("button_up", open_editor)
 	$VBoxContainer/OptionsButton.connect("button_up", open_options)
 	$VBoxContainer/CreditsButton.connect("button_up", show_credits)
 	$VBoxContainer/QuitButton.connect("button_up", quit_game)
 
 func play_game():
 	get_tree().change_scene_to_file("res://src/game_engine/beatmap.tscn")
+
+func open_editor():
+	get_tree().change_scene_to_file("res://src/mapping_engine/beatmap_maker.tscn")
 
 func open_options():
 	print("doesn't exist yet")
