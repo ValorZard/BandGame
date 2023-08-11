@@ -22,6 +22,7 @@ var score : int
 
 # audio stuff:
 @export var audio_offset_s : float = 0.0
+var song_finished := false
 
 # visual stuff
 # ---------------
@@ -31,6 +32,10 @@ var score : int
 @export var beats_per_minute : float = 112 
 
 var note_sprite
+
+# move to next scene
+@export var next_button_path : NodePath
+@export var scene_to_change_to : PackedScene
 
 # how the note array works if its a single track game
 # only care about notes charted, notes can happen at any time
@@ -48,6 +53,20 @@ func _ready():
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
 	note_array = RhythmGameUtils.load_beatmap_to_play(beatmap_file_path)
+#	var button := get_tree().get_current_scene().get_node(next_button_path)
+#	if button is Button:
+#		button.visible = false
+#		button.connect("button_up", switch_scenes)
+
+func switch_scenes():
+	get_tree().change_scene_to_packed(scene_to_change_to)
+
+
+func _on_audio_stream_player_finished():
+	song_finished = true
+	var button := get_tree().get_current_scene().get_node(next_button_path)
+	if button is Button:
+		button.visible = true
 
 func delete_note(note_pair):
 	# Stops a note from being hit twice, removing the visual instance of a note when it is.
@@ -84,7 +103,8 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 func _process(delta):
 	time_elapsed_since_start += delta
 	
-	if time_elapsed_since_start >= audio_offset_s and !$AudioStreamPlayer.playing:
+	# this is straight up the less janky way i can think of for the audio to not constantly loop
+	if time_elapsed_since_start >= audio_offset_s and time_elapsed_since_start <= audio_offset_s + 1 and !$AudioStreamPlayer.playing:
 		$AudioStreamPlayer.play()
 	
 	if Input.is_action_just_pressed("note1"):

@@ -51,7 +51,6 @@ func _ready():
 	note_timeline = $ScrollContainer/NoteTimeline
 	update_timeline()
 	load_beatmap_to_edit(beatmap_file_path)
-	# make sure to run this after loading beatmap
 	
 
 func update_timeline():
