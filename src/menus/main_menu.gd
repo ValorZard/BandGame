@@ -10,7 +10,7 @@ func _ready():
 	$VBoxContainer/QuitButton.connect("button_up", quit_game)
 
 func play_game():
-	get_tree().change_scene_to_file("res://src/game_engine/beatmap.tscn")
+	get_tree().change_scene_to_file("res://src/cutscenes/Prologue.tscn")
 
 func open_editor():
 	get_tree().change_scene_to_file("res://src/mapping_engine/beatmap_maker.tscn")

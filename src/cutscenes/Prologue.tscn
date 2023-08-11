@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://d06pl5dqrnuvt"]
+[gd_scene load_steps=6 format=3 uid="uid://d06pl5dqrnuvt"]
 
 [ext_resource type="Script" path="res://src/cutscenes/CutsceneTracker.gd" id="1_m38s3"]
+[ext_resource type="Script" path="res://src/cutscenes/NextButton.gd" id="2_tar8u"]
+[ext_resource type="PackedScene" uid="uid://db17bcah5d0li" path="res://src/cutscenes/Scene1.tscn" id="3_hogrl"]
 
 [sub_resource type="Animation" id="Animation_hm3yh"]
 resource_name = "test"
@@ -11,14 +13,20 @@ tracks/0/path = NodePath("AnimationPlayer")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.3, 0.8),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.15, 0.3, 0.5, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "values": [{
-"args": ["Hello", NodePath("Label")],
+"args": ["Varshamita: Long ago, this was once a fishing village by the sea that I knew as Mangrove Village. The people were kind and hardworking, and would shower me with praise and prayers. I couldn’t complain, after all I got everything I ever wanted. One day...", NodePath("Label")],
 "method": &"play_dialog"
 }, {
-"args": ["World", NodePath("Label")],
+"args": ["Varshamita: A monsoon hit, scattering my people to the wind and flooding the village. I was able to bring everyone back and quell the flood, but it took all the energy I had. What I thought would be a short nap turned into a two thousand year slumber…", NodePath("Label")],
 "method": &"play_dialog"
+}, {
+"args": ["Varshamita: As the years went on, Mangrove Village quickly transformed into Mangrove City, and my presence was left broken and forgotten. When I finally awoke, the world I had once known had completely changed. What caught me off guard the most was one person in particular…", NodePath("Label")],
+"method": &"play_dialog"
+}, {
+"args": [NodePath("NextButton")],
+"method": &"show_next_button"
 }]
 }
 
@@ -27,10 +35,13 @@ _data = {
 "test": SubResource("Animation_hm3yh")
 }
 
-[sub_resource type="LabelSettings" id="LabelSettings_0ayux"]
-font_size = 40
-
-[node name="Prologue" type="Node2D"]
+[node name="Prologue" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -38,9 +49,36 @@ libraries = {
 }
 script = ExtResource("1_m38s3")
 
-[node name="Label" type="Label" parent="."]
-offset_left = 216.0
-offset_top = 159.0
-offset_right = 385.0
-offset_bottom = 236.0
-label_settings = SubResource("LabelSettings_0ayux")
+[node name="Label" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -441.0
+offset_top = -145.0
+offset_right = 441.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+
+[node name="NextButton" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -87.0
+offset_top = -29.5
+offset_right = 87.0
+offset_bottom = 29.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Next Scene"
+script = ExtResource("2_tar8u")
+scene_to_change_to = ExtResource("3_hogrl")
+
+[connection signal="button_up" from="NextButton" to="NextButton" method="_on_button_up"]
