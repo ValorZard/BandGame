@@ -53,10 +53,10 @@ func _ready():
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
 	note_array = RhythmGameUtils.load_beatmap_to_play(beatmap_file_path)
-#	var button := get_tree().get_current_scene().get_node(next_button_path)
-#	if button is Button:
-#		button.visible = false
-#		button.connect("button_up", switch_scenes)
+	var button := get_tree().get_current_scene().get_node(next_button_path)
+	if button is Button:
+		button.visible = false
+		button.connect("button_up", switch_scenes)
 
 func switch_scenes():
 	get_tree().change_scene_to_packed(scene_to_change_to)
