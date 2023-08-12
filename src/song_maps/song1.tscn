@@ -7,6 +7,7 @@
 
 [node name="Song1" type="Node2D"]
 script = ExtResource("1_qoy8e")
+beatmap_file_path = &"res://test_map.json"
 next_button_path = NodePath("NextButton")
 scene_to_change_to = ExtResource("2_fk5t4")
 
