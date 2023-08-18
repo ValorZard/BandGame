@@ -22,6 +22,11 @@ RhythmGameUtils="*res://src/game_engine/rhythm_game_utils.gd"
 Deltascript="*res://addons/deltascript/deltascript_singleton.gd"
 UniversalCanvas="*res://src/UniversalCanvas.tscn"
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
 [editor_plugins]
 
 enabled=PackedStringArray()
