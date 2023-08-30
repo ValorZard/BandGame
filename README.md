@@ -28,7 +28,7 @@ This game would not be possible without the following people:
   
 - SerifVA - Voice Actor for Kurt and Thomas Starfall
   
-- Haley - Voice Actor for Varshamita
+- Haley Vlahos - Voice Actor for Varshamita
   
 - Emei - Original Character Artists for Raagavi
   
