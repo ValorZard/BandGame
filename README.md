@@ -1,8 +1,14 @@
 # Mangrove City Rock!
 
-A musical rhythm game/visual novel made in Godot 4.1.1
+A rock musical rhythm game/visual novel made in Godot 4.1.1, starring a rock band going through tough times. Over the course of the game, the characters struggle with moving on, and growing up.
 
-It contains both the actual game and the beatmap editor we use to make all the beatmaps
+The aesthetics are inspired by late 90s/early 2000s video games and anime, but the setting it takes place in is heavily inspired by the locales of southern India, especially Chennai.
+
+The soundtrack is inspired by 90s/early 2000s punk and rock, like Nirvana, Green Day, and Paramore
+
+___
+
+This repository contains both the actual game and the beatmap editor we use to make all the beatmaps
 
 This game would not be possible without the following people:
 
