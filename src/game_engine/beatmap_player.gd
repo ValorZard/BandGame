@@ -203,16 +203,3 @@ func _process(delta):
 			var screen_position_ratio : float = (-(note[0].start_time - view_window - time_elapsed_since_start)/view_window)
 			note[1].position.x = get_viewport_rect().size.x - screen_position_ratio * get_viewport_rect().size.x + GameManager.hit_zone_left_offset
 		
-
-
-#func _on_edit_button_button_down():
-#	# add beatmap player to root
-#	var beatmap_editor_instance = beatmap_editor.instantiate()
-#	beatmap_editor_instance.beatmap_file_path = beatmap_file_path
-#	#beatmap_editor_instance.load_beatmap(beatmap_file_path)
-#	get_tree().root.add_child(beatmap_editor_instance)
-#	# really weird workaround for visual bug
-#	for node in RhythmGameUtils.get_children():
-#		node.queue_free()
-#	# remove self from root
-#	get_tree().root.remove_child(self)
