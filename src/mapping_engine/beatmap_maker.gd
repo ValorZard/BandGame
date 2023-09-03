@@ -19,8 +19,6 @@ class_name BeatmapMaker
 
 @export var beatmap_file_path : StringName = "user://new_beatmap.json"
 
-@export var beatmap_player : PackedScene = load("res://src/game_engine/beatmap.tscn")
-
 @export var measure_bar : PackedScene = preload("res://src/mapping_engine/measure_bar.tscn")
 
 # note timelien

@@ -16,9 +16,6 @@ var beats_per_second : float
 # YOU SHOULD NOT LAUNCH THIS SCENE WITHOUT HAVING A BEATMAP SELECTED, ELSE IT WILL CRASH
 @export var beatmap_file_path : StringName = ""
 
-# beatmap editor
-@export var beatmap_editor : PackedScene = load("res://src/mapping_engine/beatmap_maker.tscn")
-
 # score management:
 var score : int
 

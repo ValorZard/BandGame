@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbekvxq18pnbr"]
+[gd_scene load_steps=4 format=3 uid="uid://cqpn2x1sjf0df"]
 
 [ext_resource type="Script" path="res://src/game_engine/beatmap_player.gd" id="1_seodq"]
 [ext_resource type="Texture2D" uid="uid://cmvxhynvubwrn" path="res://icon.svg" id="2_opy4g"]
