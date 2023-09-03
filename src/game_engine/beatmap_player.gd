@@ -159,7 +159,7 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 	var note_index : int = 0
 	# store note we want to hit here
 	var index_of_note_that_got_hit : int = -1 # if -1 that means we didn't find it
-	var min_time_difference : float = 2222222 # abritrarily large number for logic purposes
+	var min_time_difference : float = 92233720368547758 # abritrarily large number for logic purposes
 	while(note_index < len(note_array)):
 		# check for out of bounds crash
 		if note_index >= len(note_array):
