@@ -31,7 +31,8 @@ var song_finished := false
 # mostly visual, not that important, just juice/polish
 @export var beats_per_minute : float = 112 
 
-var note_sprite
+# This reallllly shouldn't be hardcoded but we ball i guess
+var note_sprite : PackedScene = preload("res://src/note_sprite.tscn")
 
 # move to next scene
 @export var next_button_path : NodePath
@@ -52,7 +53,7 @@ var note_sprite
 func _ready():	
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
-	note_array = RhythmGameUtils.load_beatmap_to_play(beatmap_file_path)
+	note_array = load_beatmap_to_play(beatmap_file_path)
 	var button := get_tree().get_current_scene().get_node(next_button_path)
 	if button is Button:
 		button.visible = false
@@ -61,6 +62,63 @@ func _ready():
 func switch_scenes():
 	get_tree().change_scene_to_packed(scene_to_change_to)
 
+
+# returns a note array, with each element in the array being a tuple of a note object and its sprite represenation
+func load_beatmap_to_play(beatmap_file_path : String) -> Array:
+	var note_array : Array
+	# file stuff
+	var file = FileAccess.open(beatmap_file_path, FileAccess.READ)
+	var content = file.get_as_text()
+	# json stuff
+	var json = JSON.new()
+	var error = json.parse(content)
+	if error == OK:
+		var data_received = json.data
+		if typeof(data_received) == TYPE_DICTIONARY:
+			# actually convert our json data into usable beatmap data
+			for note_data in data_received["notes"]:
+				# parse each note and convert into actual note object
+				var note_name : RhythmGameUtils.NOTES
+				match note_data["name"]:
+					"1": note_name = RhythmGameUtils.NOTES.NOTE1
+					"2": note_name = RhythmGameUtils.NOTES.NOTE2
+					"3": note_name = RhythmGameUtils.NOTES.NOTE3
+					"4": note_name = RhythmGameUtils.NOTES.NOTE4
+				var note_start_time : float = note_data["start_time"]
+				
+				# Offset is baked at runtime for the player.
+				note_array.append(RhythmGameUtils.Note.new(note_name, note_start_time + data_received["time-offset-ms"]))
+			
+			# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
+			note_array = note_array.map(note_spawner)
+			
+		else:
+			print("Unexpected data")
+	else:
+		print("JSON Parse Error: ", json.get_error_message(), " in ", content, " at line ", json.get_error_line())
+	# if this somehow fails, the note array will just be empty
+	
+	# Sort note array by duration. Rest of engine assumes this to be true.
+	note_array.sort_custom(func(a, b) : return b[0].start_time > a[0].start_time)
+	return note_array
+
+func note_spawner(note_obj : RhythmGameUtils.Note):
+	# Spawns a note sprite instance for every note object in the map array.
+	var new_note = note_sprite.instantiate()
+	# set the correct note label
+	match note_obj.note_name:
+		RhythmGameUtils.NOTES.NOTE1: new_note.get_node("NoteLabel").text = "D"
+		RhythmGameUtils.NOTES.NOTE2: new_note.get_node("NoteLabel").text = "F"
+		RhythmGameUtils.NOTES.NOTE3: new_note.get_node("NoteLabel").text = "J"
+		RhythmGameUtils.NOTES.NOTE4: new_note.get_node("NoteLabel").text = "K"
+	# set correct note position (hardcoded for now)
+	new_note.position.y = GameManager.note_vertical_offset
+	
+	# arbitrary position off screen
+	new_note.position.x = -1000
+	add_child(new_note)
+	
+	return [note_obj, new_note]
 
 func _on_audio_stream_player_finished():
 	song_finished = true
