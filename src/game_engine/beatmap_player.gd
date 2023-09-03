@@ -139,21 +139,21 @@ func note_sprite_spawner(note_data: RhythmGameUtils.NoteData):
 	
 	return RhythmGameUtils.NoteObject.new(note_data, new_note_sprite)
 
-func input_reader():
+func input_reader(current_time: float):
 	if Input.is_action_just_pressed("note1"):
 		#print("note1")
 		# we want to calculate the time missed by to make the note perfect
 		# we want to center the note in the middle of the beat
-		hit_note(RhythmGameUtils.NOTES.NOTE1, note_array, $AudioStreamPlayer.get_playback_position())
+		hit_note(RhythmGameUtils.NOTES.NOTE1, note_array, current_time)
 	if Input.is_action_just_pressed("note2"):
 		#print("note2")
-		hit_note(RhythmGameUtils.NOTES.NOTE2, note_array, $AudioStreamPlayer.get_playback_position())
+		hit_note(RhythmGameUtils.NOTES.NOTE2, note_array, current_time)
 	if Input.is_action_just_pressed("note3"):
 		#print("note3")
-		hit_note(RhythmGameUtils.NOTES.NOTE3, note_array, $AudioStreamPlayer.get_playback_position())
+		hit_note(RhythmGameUtils.NOTES.NOTE3, note_array, current_time)
 	if Input.is_action_just_pressed("note4"):
 		#print("note4")
-		hit_note(RhythmGameUtils.NOTES.NOTE4, note_array, $AudioStreamPlayer.get_playback_position())
+		hit_note(RhythmGameUtils.NOTES.NOTE4, note_array, current_time)
 
 func _on_audio_stream_player_finished():
 	song_finished = true
@@ -239,6 +239,6 @@ func _process(delta):
 	# clean up all of the notes we missed and remove them from the note array
 	clean_up_missed_notes($AudioStreamPlayer.get_playback_position())
 	
-	input_reader()
+	input_reader($AudioStreamPlayer.get_playback_position())
 	# visual stuff
 	render_notes()
