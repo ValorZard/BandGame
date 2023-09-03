@@ -7,7 +7,12 @@ const hit_window : float = 0.50
 const perfect_hit_window : float = 0.02
 
 # hit zone left-x offset (px)
+# used when notes are scrolling horizontally
 const hit_zone_left_offset : int = 200
+
+# hit zone y offset (px)
+# used when notes are scrolling vertically
+const hit_zone_y_offset : int = 100
 
 const note_vertical_offset : int = 300
 

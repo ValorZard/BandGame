@@ -8,7 +8,7 @@ var time_elapsed_since_start : float = 0
 var view_window : float = 1 # from now to now + view window, thats the notes that will show
 
 # note managements
-var note_array : Array #contains NoteObject only, which are data and visual bundled together 
+var note_array : Array[RhythmGameUtils.NoteObject] #contains NoteObject only, which are data and visual bundled together 
 var beats_per_second : float 
 
 # actual beat map
@@ -62,7 +62,8 @@ func _ready():
 	
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
-	load_beatmap_to_play(beatmap_file_path)
+	var note_data_array := load_beatmap_to_play(beatmap_file_path)
+	note_array = note_sprite_spawner(note_data_array)
 	# if it isn't being edited, only show button once song is done
 	if(!is_being_edited):
 		$NextButton.visible = false
@@ -78,8 +79,8 @@ func go_to_next_scene():
 		SceneSwitcher.goto_editor(beatmap_file_path)
 
 
-# fills up our note array, with each element in the array being a tuple of a note object and its sprite represenation
-func load_beatmap_to_play(beatmap_file_path : String):
+# fills up our note array, with each element in the array being a representation of the note data
+func load_beatmap_to_play(beatmap_file_path : String) -> Array[RhythmGameUtils.NoteData]:
 	# first get an array of all the data
 	var note_data_array : Array[RhythmGameUtils.NoteData]
 	# file stuff
@@ -106,38 +107,41 @@ func load_beatmap_to_play(beatmap_file_path : String):
 				note_data_array.append(RhythmGameUtils.NoteData.new(note_name, note_start_time + data_received["time-offset-ms"]))
 			
 			# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
-			note_array = note_data_array.map(note_sprite_spawner)
+			#note_array = note_data_array.map(note_sprite_spawner)
 			
 		else:
 			print("Unexpected data")
 	else:
 		print("JSON Parse Error: ", json.get_error_message(), " in ", content, " at line ", json.get_error_line())
 	# if this somehow fails, the note array will just be empty
-	
-	# Sort note array by duration. Rest of engine assumes this to be true.
-	note_array.sort_custom(func(a, b) : return b.data.start_time > a.data.start_time)
+	return note_data_array
 
-func note_sprite_spawner(note_data: RhythmGameUtils.NoteData):
-	# Spawns a note sprite instance for every note object in the map array.
-	var new_note_sprite = note_sprite.instantiate()
-	# set the correct note label
-	match note_data.note_name:
-		RhythmGameUtils.NOTES.NOTE1: 
-			new_note_sprite.set_texture(note1_texture)
-		RhythmGameUtils.NOTES.NOTE2: 
-			new_note_sprite.set_texture(note2_texture)
-		RhythmGameUtils.NOTES.NOTE3: 
-			new_note_sprite.set_texture(note3_texture)
-		RhythmGameUtils.NOTES.NOTE4: 
-			new_note_sprite.set_texture(note4_texture)
-	# set correct note position (hardcoded for now)
-	new_note_sprite.position.y = GameManager.note_vertical_offset
-	
-	# arbitrary position off screen
-	new_note_sprite.position.x = -1000
-	add_child(new_note_sprite)
-	
-	return RhythmGameUtils.NoteObject.new(note_data, new_note_sprite)
+func note_sprite_spawner(note_data_array : Array[RhythmGameUtils.NoteData]) -> Array[RhythmGameUtils.NoteObject]:
+	var new_note_array : Array[RhythmGameUtils.NoteObject]
+	for note_data in note_data_array:
+		# Spawns a note sprite instance for every note object in the map array.
+		var new_note_sprite = note_sprite.instantiate()
+		# set the correct note label
+		match note_data.note_name:
+			RhythmGameUtils.NOTES.NOTE1: 
+				new_note_sprite.set_texture(note1_texture)
+			RhythmGameUtils.NOTES.NOTE2: 
+				new_note_sprite.set_texture(note2_texture)
+			RhythmGameUtils.NOTES.NOTE3: 
+				new_note_sprite.set_texture(note3_texture)
+			RhythmGameUtils.NOTES.NOTE4: 
+				new_note_sprite.set_texture(note4_texture)
+		# set correct note position (hardcoded for now)
+		new_note_sprite.position.y = GameManager.note_vertical_offset
+		
+		# arbitrary position off screen
+		new_note_sprite.position.x = -1000
+		add_child(new_note_sprite)
+		new_note_array.append(RhythmGameUtils.NoteObject.new(note_data, new_note_sprite))
+	# Sort note array by duration. Rest of engine assumes this to be true.
+	new_note_array.sort_custom(func(a, b) : return b.data.start_time > a.data.start_time)
+	return new_note_array
+
 
 func input_reader(current_time: float):
 	if Input.is_action_just_pressed("note1"):
@@ -154,6 +158,14 @@ func input_reader(current_time: float):
 	if Input.is_action_just_pressed("note4"):
 		#print("note4")
 		hit_note(RhythmGameUtils.NOTES.NOTE4, note_array, current_time)
+
+func try_playing_audio(delta : float):
+	# TODO: replace with get_playback_position()
+	time_elapsed_since_start += delta
+	
+	# this is straight up the less janky way i can think of for the audio to not constantly loop
+	if time_elapsed_since_start >= audio_offset_s and time_elapsed_since_start <= audio_offset_s + 1 and !$AudioStreamPlayer.playing:
+		$AudioStreamPlayer.play()
 
 func _on_audio_stream_player_finished():
 	song_finished = true
@@ -228,13 +240,9 @@ func render_notes():
 			note.sprite.position.y = get_viewport_rect().size.y / 2
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	# TODO: replace with get_playback_position()
-	time_elapsed_since_start += delta
-	
-	# this is straight up the less janky way i can think of for the audio to not constantly loop
-	if time_elapsed_since_start >= audio_offset_s and time_elapsed_since_start <= audio_offset_s + 1 and !$AudioStreamPlayer.playing:
-		$AudioStreamPlayer.play()
+func _process(delta : float):
+	# only calls audio when its the correct time to do so
+	try_playing_audio(delta)
 	
 	# clean up all of the notes we missed and remove them from the note array
 	clean_up_missed_notes($AudioStreamPlayer.get_playback_position())
