@@ -167,14 +167,7 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 		var time_difference = note_array[note_index].data.check_hit(current_time)
 		if time_difference <= GameManager.hit_window:
 			if !note_array[note_index].data.already_hit:
-				# this shouldn't be here, this should be a seperate function
-				# this is meant to clean up missed notes
-				if (note_array[note_index].data.start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
-					# Handles ignoring notes that were missed.
-					# FIXED 07/11/22: WAIT_CLEAR is used as an offset to wait until missed notes are fully passed before visually clearing them.
-					delete_note(note_array[note_index])
-					
-				elif note_array[note_index].data.note_name == note_name:
+				if note_array[note_index].data.note_name == note_name:
 					# if we have a note that fits the critera, store it
 					# we're going to keep iterating in case we find a better one
 					if(min_time_difference > time_difference):
@@ -191,8 +184,18 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 			score += GameManager.NORMAL_SCORE
 		$Score.text = str(score)
 
-func clean_up_missed_notes():
-	pass
+func clean_up_missed_notes(current_time : float):
+	var queue_of_notes_missed : Array[RhythmGameUtils.NoteObject]
+	for note in note_array:
+		if (note.data.start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
+			# Handles ignoring notes that were missed.
+			# FIXED 07/11/22: WAIT_CLEAR is used as an offset to wait until missed notes are fully passed before visually clearing them.
+			queue_of_notes_missed.append(note)
+	
+	# remove each note missed from the queue
+	for note in queue_of_notes_missed:
+		delete_note(note)
+		note_array.erase(note)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -205,7 +208,7 @@ func _process(delta):
 		$AudioStreamPlayer.play()
 	
 	# clean up all of the notes we missed and remove them from the note array
-	clean_up_missed_notes()
+	clean_up_missed_notes($AudioStreamPlayer.get_playback_position())
 	
 	if Input.is_action_just_pressed("note1"):
 		#print("note1")
