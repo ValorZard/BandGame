@@ -8,7 +8,7 @@ var time_elapsed_since_start : float = 0
 var view_window : float = 1 # from now to now + view window, thats the notes that will show
 
 # note managements
-@export var note_array : Array
+var note_array : Array #contains NoteObject only, which are data and visual bundled together 
 var beats_per_second : float 
 
 # actual beat map
@@ -58,7 +58,7 @@ func _ready():
 	
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
-	note_array = load_beatmap_to_play(beatmap_file_path)
+	load_beatmap_to_play(beatmap_file_path)
 	# if it isn't being edited, only show button once song is done
 	if(!is_being_edited):
 		$NextButton.visible = false
@@ -74,9 +74,10 @@ func go_to_next_scene():
 		SceneSwitcher.goto_editor(beatmap_file_path)
 
 
-# returns a note array, with each element in the array being a tuple of a note object and its sprite represenation
-func load_beatmap_to_play(beatmap_file_path : String) -> Array:
-	var note_array : Array
+# fills up our note array, with each element in the array being a tuple of a note object and its sprite represenation
+func load_beatmap_to_play(beatmap_file_path : String):
+	# first get an array of all the data
+	var note_data_array : Array[RhythmGameUtils.NoteData]
 	# file stuff
 	var file = FileAccess.open(beatmap_file_path, FileAccess.READ)
 	var content = file.get_as_text()
@@ -98,10 +99,10 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array:
 				var note_start_time : float = note_json_data["start_time"]
 				
 				# Offset is baked at runtime for the player.
-				note_array.append(RhythmGameUtils.NoteData.new(note_name, note_start_time + data_received["time-offset-ms"]))
+				note_data_array.append(RhythmGameUtils.NoteData.new(note_name, note_start_time + data_received["time-offset-ms"]))
 			
 			# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
-			note_array = note_array.map(note_sprite_spawner)
+			note_array = note_data_array.map(note_sprite_spawner)
 			
 		else:
 			print("Unexpected data")
@@ -110,26 +111,25 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array:
 	# if this somehow fails, the note array will just be empty
 	
 	# Sort note array by duration. Rest of engine assumes this to be true.
-	note_array.sort_custom(func(a, b) : return b[0].start_time > a[0].start_time)
-	return note_array
+	note_array.sort_custom(func(a, b) : return b.data.start_time > a.data.start_time)
 
-func note_sprite_spawner(note_obj : RhythmGameUtils.NoteData):
+func note_sprite_spawner(note_data: RhythmGameUtils.NoteData):
 	# Spawns a note sprite instance for every note object in the map array.
-	var new_note = note_sprite.instantiate()
+	var new_note_sprite = note_sprite.instantiate()
 	# set the correct note label
-	match note_obj.note_name:
-		RhythmGameUtils.NOTES.NOTE1: new_note.get_node("NoteLabel").text = "D"
-		RhythmGameUtils.NOTES.NOTE2: new_note.get_node("NoteLabel").text = "F"
-		RhythmGameUtils.NOTES.NOTE3: new_note.get_node("NoteLabel").text = "J"
-		RhythmGameUtils.NOTES.NOTE4: new_note.get_node("NoteLabel").text = "K"
+	match note_data.note_name:
+		RhythmGameUtils.NOTES.NOTE1: new_note_sprite.get_node("NoteLabel").text = "D"
+		RhythmGameUtils.NOTES.NOTE2: new_note_sprite.get_node("NoteLabel").text = "F"
+		RhythmGameUtils.NOTES.NOTE3: new_note_sprite.get_node("NoteLabel").text = "J"
+		RhythmGameUtils.NOTES.NOTE4: new_note_sprite.get_node("NoteLabel").text = "K"
 	# set correct note position (hardcoded for now)
-	new_note.position.y = GameManager.note_vertical_offset
+	new_note_sprite.position.y = GameManager.note_vertical_offset
 	
 	# arbitrary position off screen
-	new_note.position.x = -1000
-	add_child(new_note)
+	new_note_sprite.position.x = -1000
+	add_child(new_note_sprite)
 	
-	return [note_obj, new_note]
+	return RhythmGameUtils.NoteObject.new(note_data, new_note_sprite)
 
 func _on_audio_stream_player_finished():
 	song_finished = true
@@ -137,8 +137,8 @@ func _on_audio_stream_player_finished():
 
 func delete_note(note_pair):
 	# Stops a note from being hit twice, removing the visual instance of a note when it is.
-	note_pair[0].already_hit = true
-	note_pair[1].queue_free()
+	note_pair.data.already_hit = true
+	note_pair.sprite.queue_free()
 
 # this function is kinda broken and needs to be stress tested heavily
 # we are doing things here that might break when we least expect it, because we're removing notes while looping through the array
@@ -154,14 +154,14 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 		if note_index >= len(note_array):
 			break
 		
-		if !note_array[note_index][0].already_hit:
-			if (note_array[note_index][0].start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
+		if !note_array[note_index].data.already_hit:
+			if (note_array[note_index].data.start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
 				# Handles ignoring notes that were missed.
 				# FIXED 07/11/22: WAIT_CLEAR is used as an offset to wait until missed notes are fully passed before visually clearing them.
 				delete_note(note_array[note_index])
 				
-			elif note_array[note_index][0].note_name == note_name:
-				var hit_result = note_array[note_index][0].check_hit(current_time)
+			elif note_array[note_index].data.note_name == note_name:
+				var hit_result = note_array[note_index].data.check_hit(current_time)
 				if hit_result != RhythmGameUtils.HIT_RESULTS.NO_HIT:
 					if hit_result == RhythmGameUtils.HIT_RESULTS.PERFECT:
 						score += GameManager.PERFECT_SCORE
@@ -203,9 +203,9 @@ func _process(delta):
 	# move the notes across the screen one by one
 	for note in note_array:
 		# note is a 2-tuple of [NoteObject, NoteSprite]
-		if !note[0].already_hit and note[0].start_time - view_window <= time_elapsed_since_start:
+		if !note.data.already_hit and note.data.start_time - view_window <= time_elapsed_since_start:
 			# display the note position on screen based on the ratio between where the note is spawned and where its supposed to be hit
 			# if its 0, its all the way to the right, and visa versa
-			var screen_position_ratio : float = (-(note[0].start_time - view_window - time_elapsed_since_start)/view_window)
-			note[1].position.x = get_viewport_rect().size.x - screen_position_ratio * get_viewport_rect().size.x + GameManager.hit_zone_left_offset
+			var screen_position_ratio : float = (-(note.data.start_time - view_window - time_elapsed_since_start)/view_window)
+			note.sprite.position.x = get_viewport_rect().size.x - screen_position_ratio * get_viewport_rect().size.x + GameManager.hit_zone_left_offset
 		

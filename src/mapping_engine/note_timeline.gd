@@ -59,7 +59,7 @@ func _gui_input(event):
 			var note_data : RhythmGameUtils.NoteData = RhythmGameUtils.NoteData.new(RhythmGameUtils.NOTES.NOTE1, current_position_in_song)
 			var note_sprite := note_selector.instantiate()
 			# add note object to sprite
-			note_sprite.note = note_data
+			note_sprite.note_data = note_data
 			# set up note sprite signals
 			note_sprite.note_deleted.connect(delete_note)
 			# put the note sprite on the right place in the timeline while keeping it centered
@@ -67,11 +67,16 @@ func _gui_input(event):
 			note_sprite.position.y = self.size.y / 2
 			# make sure to actually add the note object to the note array, and add the note sprite to the scene
 			add_child(note_sprite)
-			note_array.append([note_data, note_sprite])
+			note_array.append(RhythmGameUtils.NoteObject.new(note_data, note_sprite))
 
 func delete_note(note_data : RhythmGameUtils.NoteData, note_sprite):
 	# remove note from note array
-	note_array.erase([note_data, note_sprite])
+	var index : int = 0
+	while(index < len(note_array)):
+		if note_array[index].data == note_data and note_array[index].sprite == note_sprite:
+			break
+		index += 1
+	note_array.remove_at(index)
 	raw_note_times.erase(note_data.start_time)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

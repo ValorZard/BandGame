@@ -82,7 +82,7 @@ func _process(delta : float):
 
 func redraw_timeline():
 	for note in note_timeline.note_array:
-		note[1].position.x = (note[0].start_time / song_length) * $ScrollContainer/NoteTimeline.custom_minimum_size.x
+		note.sprite.position.x = (note.data.start_time / song_length) * $ScrollContainer/NoteTimeline.custom_minimum_size.x
 
 func _on_zoom_edit_text_changed(new_text):
 	if new_text.is_valid_int() and int(new_text) > 0:
@@ -140,7 +140,7 @@ func export_beatmap():
 	var beatmap_dictionary : Dictionary = {"music-file" : path_to_music_file, "time-offset-ms" : time_offset_ms, "notes" : []}
 	
 	for note in note_array:
-		var note_data : RhythmGameUtils.NoteData = note[0]
+		var note_data : RhythmGameUtils.NoteData = note.data
 		# JSON provides a static method to serialized JSON string.
 		var note_name_string := ""
 		# represent notes as the actual keys on the keyboard your hitting
@@ -188,6 +188,7 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 					note_array.append(new_note)
 					#print(new_note.note_name, ",  ", new_note.start_time)
 					note_timeline.raw_note_times[new_note.start_time] = true
+				# convert note array from array of note data to array of NoteObjects
 				# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
 				note_array = note_array.map(note_selector_spawner)
 			else:
@@ -200,7 +201,7 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 		pass
 
 func note_selector_spawner(note_data : RhythmGameUtils.NoteData):
-	# Spawns a note sprite instance for every note object in the map array.
+	# Spawns a note sprite instance for each note data object in the map array.
 	var note_sprite = note_selector.instantiate()
 	#print(note_sprite.option_button)
 	# set note data
@@ -221,7 +222,7 @@ func note_selector_spawner(note_data : RhythmGameUtils.NoteData):
 		RhythmGameUtils.NOTES.NOTE3: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE3
 		RhythmGameUtils.NOTES.NOTE4: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE4
 	
-	return [note_sprite.note_data, note_sprite]
+	return RhythmGameUtils.NoteObject.new(note_sprite.note_data, note_sprite)
 
 func _on_test_button_button_down():
 	SceneSwitcher.goto_edited_song(beatmap_file_path)
