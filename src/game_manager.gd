@@ -1,7 +1,7 @@
 extends Node
 
 # overall hit window
-const hit_window : float = 0.10
+const hit_window : float = 0.50
 
 # hit window when the player hits the notes perfectly
 const perfect_hit_window : float = 0.02

@@ -141,7 +141,7 @@ func delete_note(note_pair):
 	note_pair[1].queue_free()
 
 func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_time : float):
-	$DebugNoteLabel.text = str("note name ", note_name)
+	$DebugNoteLabel.text = str("note name ", note_name, " at: ",  "%10.3f" % current_time)
 	
 	# go through every single note on screen and see which one is close enough to hit, and wheather it matches the note the player hit
 	for note in range(len(note_array)):

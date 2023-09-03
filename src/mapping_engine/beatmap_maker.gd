@@ -78,7 +78,7 @@ func _process(delta : float):
 		time_elapsed += delta
 		$ScrollContainer.set_h_scroll(time_elapsed * length_of_note * timeline_zoom)
 		# string formatting
-		$PlaySongContainer/PlaySongLabel.text = "%10.1f" % time_elapsed
+		$PlaySongContainer/PlaySongLabel.text = "%10.3f" % time_elapsed
 
 func redraw_timeline():
 	for note in note_timeline.note_array:
