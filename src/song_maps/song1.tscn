@@ -1,15 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://dbekvxq18pnbr"]
+[gd_scene load_steps=4 format=3 uid="uid://dbekvxq18pnbr"]
 
-[ext_resource type="Script" path="res://src/game_engine/HitDetector.gd" id="1_qoy8e"]
-[ext_resource type="PackedScene" uid="uid://cqpjt6rs472cs" path="res://src/cutscenes/Scene1B.tscn" id="2_fk5t4"]
+[ext_resource type="Script" path="res://src/game_engine/beatmap_player.gd" id="1_seodq"]
 [ext_resource type="Texture2D" uid="uid://cmvxhynvubwrn" path="res://icon.svg" id="2_opy4g"]
 [ext_resource type="AudioStream" uid="uid://6r33ppfe6njj" path="res://assets/audio/assets_audio_MUSCMisc_Metronome_a_120bpm_ID_0468_BSB_consolidated.wav" id="3_5qagp"]
 
 [node name="Song1" type="Node2D"]
-script = ExtResource("1_qoy8e")
-beatmap_file_path = &"res://test_map.json"
-next_button_path = NodePath("NextButton")
-scene_to_change_to = ExtResource("2_fk5t4")
+script = ExtResource("1_seodq")
 
 [node name="DebugBeatLabel" type="Label" parent="."]
 offset_right = 40.0
