@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://da5h0bigulicr"]
 
-[ext_resource type="Texture2D" uid="uid://dgqqej1sjrn7b" path="res://assets/textures/notes/noteA.png" id="1_ekahg"]
+[ext_resource type="Texture2D" uid="uid://dgqqej1sjrn7b" path="res://assets/textures/notes/note_template.png" id="1_u1c15"]
 [ext_resource type="Script" path="res://src/mapping_engine/note_selector.gd" id="2_t4u3w"]
 
 [node name="NoteSelector" type="TextureRect"]
@@ -8,7 +8,7 @@ offset_left = -28.0
 offset_top = -64.0
 offset_right = 28.0
 offset_bottom = 64.0
-texture = ExtResource("1_ekahg")
+texture = ExtResource("1_u1c15")
 script = ExtResource("2_t4u3w")
 
 [node name="OptionButton" type="OptionButton" parent="."]

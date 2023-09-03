@@ -32,6 +32,10 @@ var song_finished := false
 
 # This reallllly shouldn't be hardcoded but we ball i guess
 var note_sprite : PackedScene = preload("res://src/note_sprite.tscn")
+var note1_texture : Texture2D = preload("res://assets/textures/notes/note1.png")
+var note2_texture : Texture2D = preload("res://assets/textures/notes/note2.png")
+var note3_texture : Texture2D = preload("res://assets/textures/notes/note3.png")
+var note4_texture : Texture2D = preload("res://assets/textures/notes/note4.png")
 
 # move to next scene
 @export var next_button_path : NodePath
@@ -118,10 +122,14 @@ func note_sprite_spawner(note_data: RhythmGameUtils.NoteData):
 	var new_note_sprite = note_sprite.instantiate()
 	# set the correct note label
 	match note_data.note_name:
-		RhythmGameUtils.NOTES.NOTE1: new_note_sprite.get_node("NoteLabel").text = "D"
-		RhythmGameUtils.NOTES.NOTE2: new_note_sprite.get_node("NoteLabel").text = "F"
-		RhythmGameUtils.NOTES.NOTE3: new_note_sprite.get_node("NoteLabel").text = "J"
-		RhythmGameUtils.NOTES.NOTE4: new_note_sprite.get_node("NoteLabel").text = "K"
+		RhythmGameUtils.NOTES.NOTE1: 
+			new_note_sprite.set_texture(note1_texture)
+		RhythmGameUtils.NOTES.NOTE2: 
+			new_note_sprite.set_texture(note2_texture)
+		RhythmGameUtils.NOTES.NOTE3: 
+			new_note_sprite.set_texture(note3_texture)
+		RhythmGameUtils.NOTES.NOTE4: 
+			new_note_sprite.set_texture(note4_texture)
 	# set correct note position (hardcoded for now)
 	new_note_sprite.position.y = GameManager.note_vertical_offset
 	
@@ -208,4 +216,5 @@ func _process(delta):
 			# if its 0, its all the way to the right, and visa versa
 			var screen_position_ratio : float = (-(note.data.start_time - view_window - time_elapsed_since_start)/view_window)
 			note.sprite.position.x = get_viewport_rect().size.x - screen_position_ratio * get_viewport_rect().size.x + GameManager.hit_zone_left_offset
-		
+			# Set y position
+			note.sprite.position.y = get_viewport_rect().size.y / 2

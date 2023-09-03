@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://byjt6qcu7xktc"]
+[gd_scene load_steps=5 format=3 uid="uid://byjt6qcu7xktc"]
 
 [ext_resource type="Script" path="res://src/game_engine/beatmap_player.gd" id="1_afapl"]
-[ext_resource type="Texture2D" uid="uid://cmvxhynvubwrn" path="res://icon.svg" id="3_1q2pg"]
+[ext_resource type="Texture2D" uid="uid://bhp3fgvdglbik" path="res://assets/textures/notes/HitZone.png" id="2_udw1p"]
+[ext_resource type="Texture2D" uid="uid://gwj448e03nay" path="res://assets/textures/notes/note_ghost.png" id="3_pi01a"]
 [ext_resource type="AudioStream" uid="uid://6r33ppfe6njj" path="res://assets/audio/assets_audio_MUSCMisc_Metronome_a_120bpm_ID_0468_BSB_consolidated.wav" id="3_vw451"]
 
 [node name="BeatmapPlayer" type="Node2D"]
@@ -24,8 +25,10 @@ offset_right = 88.0
 offset_bottom = 614.0
 
 [node name="HitZone" type="Sprite2D" parent="."]
-scale = Vector2(0.148438, 8.85144)
-texture = ExtResource("3_1q2pg")
+texture = ExtResource("2_udw1p")
+
+[node name="GhostNote" type="Sprite2D" parent="HitZone"]
+texture = ExtResource("3_pi01a")
 
 [node name="NextButton" type="Button" parent="."]
 anchors_preset = 15
