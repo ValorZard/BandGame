@@ -189,7 +189,7 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 					#print(new_note.note_name, ",  ", new_note.start_time)
 					note_timeline.raw_note_times[new_note.start_time] = true
 				# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
-				note_array = note_array.map(note_spawner)
+				note_array = note_array.map(note_selector_spawner)
 			else:
 				print("Unexpected data")
 		else:
@@ -199,7 +199,7 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 	else: 
 		pass
 
-func note_spawner(note_data : RhythmGameUtils.NoteData):
+func note_selector_spawner(note_data : RhythmGameUtils.NoteData):
 	# Spawns a note sprite instance for every note object in the map array.
 	var note_sprite = note_selector.instantiate()
 	#print(note_sprite.option_button)

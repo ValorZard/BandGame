@@ -101,7 +101,7 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array:
 				note_array.append(RhythmGameUtils.NoteData.new(note_name, note_start_time + data_received["time-offset-ms"]))
 			
 			# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
-			note_array = note_array.map(note_spawner)
+			note_array = note_array.map(note_sprite_spawner)
 			
 		else:
 			print("Unexpected data")
@@ -113,7 +113,7 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array:
 	note_array.sort_custom(func(a, b) : return b[0].start_time > a[0].start_time)
 	return note_array
 
-func note_spawner(note_obj : RhythmGameUtils.NoteData):
+func note_sprite_spawner(note_obj : RhythmGameUtils.NoteData):
 	# Spawns a note sprite instance for every note object in the map array.
 	var new_note = note_sprite.instantiate()
 	# set the correct note label
