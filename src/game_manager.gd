@@ -19,3 +19,5 @@ const WAIT_CLEAR : int = 1
 # scoring consts
 const PERFECT_SCORE = 1000
 const NORMAL_SCORE = 100
+
+# data that will change as the game goes on (DO NOT OVERUSE THIS)

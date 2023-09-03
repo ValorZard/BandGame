@@ -12,7 +12,9 @@ var view_window : float = 1 # from now to now + view window, thats the notes tha
 var beats_per_second : float 
 
 # actual beat map
-@export var beatmap_file_path : StringName = "user://new_beatmap.json"
+# this is meant to be overridden
+# YOU SHOULD NOT LAUNCH THIS SCENE WITHOUT HAVING A BEATMAP SELECTED, ELSE IT WILL CRASH
+@export var beatmap_file_path : StringName = ""
 
 # beatmap editor
 @export var beatmap_editor : PackedScene = load("res://src/mapping_engine/beatmap_maker.tscn")
@@ -38,6 +40,9 @@ var note_sprite : PackedScene = preload("res://src/note_sprite.tscn")
 @export var next_button_path : NodePath
 @export var scene_to_change_to : PackedScene
 
+# check if this is being edited, if so, we should turn on editor stuff
+@export var is_being_edited := false
+
 # how the note array works if its a single track game
 # only care about notes charted, notes can happen at any time
 # (note_type, start_time, note)
@@ -51,16 +56,25 @@ var note_sprite : PackedScene = preload("res://src/note_sprite.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():	
+	# make sure there's a valid beatmap_file_path
+	assert(beatmap_file_path != "")
+	
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
 	note_array = load_beatmap_to_play(beatmap_file_path)
-	var button := get_tree().get_current_scene().get_node(next_button_path)
-	if button is Button:
-		button.visible = false
-		button.connect("button_up", switch_scenes)
+	# if it isn't being edited, only show button once song is done
+	if(!is_being_edited):
+		$NextButton.visible = false
+	$NextButton.connect("button_up", go_to_next_scene)
+	# make audio player signal that its finished
+	$AudioStreamPlayer.connect("finished", _on_audio_stream_player_finished)
 
-func switch_scenes():
-	get_tree().change_scene_to_packed(scene_to_change_to)
+func go_to_next_scene():
+	if(!is_being_edited):
+		SceneSwitcher.goto_packed_scene(scene_to_change_to)
+	else:
+		# go edit the beatmap file
+		SceneSwitcher.goto_editor(beatmap_file_path)
 
 
 # returns a note array, with each element in the array being a tuple of a note object and its sprite represenation
@@ -122,9 +136,7 @@ func note_spawner(note_obj : RhythmGameUtils.Note):
 
 func _on_audio_stream_player_finished():
 	song_finished = true
-	var button := get_tree().get_current_scene().get_node(next_button_path)
-	if button is Button:
-		button.visible = true
+	$NextButton.visible = true
 
 func delete_note(note_pair):
 	# Stops a note from being hit twice, removing the visual instance of a note when it is.
@@ -193,14 +205,14 @@ func _process(delta):
 		
 
 
-func _on_edit_button_button_down():
-	# add beatmap player to root
-	var beatmap_editor_instance = beatmap_editor.instantiate()
-	beatmap_editor_instance.beatmap_file_path = beatmap_file_path
-	#beatmap_editor_instance.load_beatmap(beatmap_file_path)
-	get_tree().root.add_child(beatmap_editor_instance)
-	# really weird workaround for visual bug
-	for node in RhythmGameUtils.get_children():
-		node.queue_free()
-	# remove self from root
-	get_tree().root.remove_child(self)
+#func _on_edit_button_button_down():
+#	# add beatmap player to root
+#	var beatmap_editor_instance = beatmap_editor.instantiate()
+#	beatmap_editor_instance.beatmap_file_path = beatmap_file_path
+#	#beatmap_editor_instance.load_beatmap(beatmap_file_path)
+#	get_tree().root.add_child(beatmap_editor_instance)
+#	# really weird workaround for visual bug
+#	for node in RhythmGameUtils.get_children():
+#		node.queue_free()
+#	# remove self from root
+#	get_tree().root.remove_child(self)

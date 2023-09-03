@@ -226,13 +226,7 @@ func note_spawner(note_obj : RhythmGameUtils.Note):
 	return [note_sprite.note, note_sprite]
 
 func _on_test_button_button_down():
-	# add beatmap player to root
-	var beatmap_player_instance : BeatmapPlayer = beatmap_player.instantiate()
-	#print(beatmap_player_instance)
-	beatmap_player_instance.beatmap_file_path = beatmap_file_path
-	get_tree().root.add_child(beatmap_player_instance)
-	# remove self from root
-	get_tree().root.remove_child(self)
+	SceneSwitcher.goto_edited_song(beatmap_file_path)
 
 func _on_play_button_button_down():
 	$AudioStreamPlayer.play()

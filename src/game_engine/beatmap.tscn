@@ -27,7 +27,7 @@ offset_bottom = 614.0
 scale = Vector2(0.148438, 8.85144)
 texture = ExtResource("3_1q2pg")
 
-[node name="EditButton" type="Button" parent="."]
+[node name="NextButton" type="Button" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -37,9 +37,7 @@ offset_right = 1151.0
 offset_bottom = 649.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Edit Beatmap"
+text = "Next Scene"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_vw451")
-
-[connection signal="button_down" from="EditButton" to="." method="_on_edit_button_button_down"]

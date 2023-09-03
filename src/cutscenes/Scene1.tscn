@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/cutscenes/CutsceneTracker.gd" id="1_1desq"]
 [ext_resource type="Script" path="res://src/cutscenes/NextButton.gd" id="2_jx7f6"]
-[ext_resource type="PackedScene" uid="uid://dbekvxq18pnbr" path="res://src/song_maps/song1.tscn" id="3_gesc4"]
+[ext_resource type="PackedScene" uid="uid://cqpjt6rs472cs" path="res://src/cutscenes/Scene1B.tscn" id="3_u0h6j"]
 
 [sub_resource type="Animation" id="Animation_hm3yh"]
 resource_name = "test"
@@ -76,6 +76,8 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Next Scene"
 script = ExtResource("2_jx7f6")
-scene_to_change_to = ExtResource("3_gesc4")
+scene_to_change_to = ExtResource("3_u0h6j")
+beatmap_file_for_next_song = &"res://test_map.json"
+is_next_scene_song = true
 
 [connection signal="button_up" from="NextButton" to="NextButton" method="_on_button_up"]

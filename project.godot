@@ -21,6 +21,7 @@ GameManager="*res://src/game_manager.gd"
 RhythmGameUtils="*res://src/game_engine/rhythm_game_utils.gd"
 Deltascript="*res://addons/deltascript/deltascript_singleton.gd"
 UniversalCanvas="*res://src/UniversalCanvas.tscn"
+SceneSwitcher="*res://src/scene_switcher.gd"
 
 [display]
 
