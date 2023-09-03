@@ -8,7 +8,8 @@ var time_elapsed_since_start : float = 0
 var view_window : float = 1 # from now to now + view window, thats the notes that will show
 
 # note managements
-var note_queue : NoteQueue #contains NoteObject only, which are data and visual bundled together 
+# have queues for each of the notes
+var note_queues : Array[NoteQueue] #contains NoteObject only, which are data and visual bundled together 
 var notes_currently_on_screen : Array[RhythmGameUtils.NoteObject]
 var beats_per_second : float 
 
@@ -64,7 +65,7 @@ func _ready():
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
 	var note_data_array := load_beatmap_to_play(beatmap_file_path)
-	note_queue = note_sprite_spawner(note_data_array)
+	note_queues = note_sprite_spawner(note_data_array)
 	# if it isn't being edited, only show button once song is done
 	if(!is_being_edited):
 		$NextButton.visible = false
@@ -117,8 +118,13 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array[RhythmGameUtils.N
 	# if this somehow fails, the note array will just be empty
 	return note_data_array
 
-func note_sprite_spawner(note_data_array : Array[RhythmGameUtils.NoteData]) -> NoteQueue:
-	var new_note_array : NoteQueue = NoteQueue.new()
+func note_sprite_spawner(note_data_array : Array[RhythmGameUtils.NoteData]) -> Array[NoteQueue]:
+	var note_queue_array : Array[NoteQueue]
+	
+	# make seperate queues for each note (NOTE1, NOTE2, etc)
+	for note_name in RhythmGameUtils.NOTES:
+		note_queue_array.append(NoteQueue.new())
+	
 	for note_data in note_data_array:
 		# Spawns a note sprite instance for every note object in the map array.
 		var new_note_sprite = note_sprite.instantiate()
@@ -139,8 +145,8 @@ func note_sprite_spawner(note_data_array : Array[RhythmGameUtils.NoteData]) -> N
 		new_note_sprite.position.x = -1000
 		add_child(new_note_sprite)
 		# since we're using a priority queue, this should already be sorted
-		new_note_array.insert(RhythmGameUtils.NoteObject.new(note_data, new_note_sprite))
-	return new_note_array
+		note_queue_array[note_data.note_name].insert(RhythmGameUtils.NoteObject.new(note_data, new_note_sprite))
+	return note_queue_array
 
 
 func input_reader(current_time: float):
@@ -228,9 +234,11 @@ func clean_up_missed_notes(current_time : float):
 		notes_currently_on_screen.erase(note)
 
 func get_notes_from_queue():
-	var note := note_queue.extract()
-	if (note != null):
-		notes_currently_on_screen.append(note)
+	# extract a note of each type from the note queue
+	for note_queue in note_queues: 
+		var note := note_queue.extract()
+		if (note != null):
+			notes_currently_on_screen.append(note)
 
 func render_notes():
 	# move the notes across the screen one by one

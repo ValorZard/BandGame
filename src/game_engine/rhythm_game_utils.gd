@@ -9,8 +9,7 @@ enum NOTES {
 	NOTE1, 
 	NOTE2, 
 	NOTE3,
-	NOTE4, 
-	NOTE_LAST # this is meant to be use as the "size" of the NOTES enum for arrays and stuff
+	NOTE4,
 }
 
 enum HIT_RESULTS {NO_HIT, HIT, PERFECT}
