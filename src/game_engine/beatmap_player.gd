@@ -145,6 +145,9 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 	
 	# go through every single note on screen and see which one is close enough to hit, and wheather it matches the note the player hit
 	for note in range(len(note_array)):
+		if note >= len(note_array):
+			break
+			
 		if !note_array[note][0].already_hit:
 			if (note_array[note][0].start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
 				# Handles ignoring notes that were missed.
@@ -163,7 +166,6 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 					$Score.text = str(score)
 					note_array.remove_at(note)
 					
-				return
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
