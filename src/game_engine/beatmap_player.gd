@@ -140,31 +140,37 @@ func delete_note(note_pair):
 	note_pair[0].already_hit = true
 	note_pair[1].queue_free()
 
+# this function is kinda broken and needs to be stress tested heavily
+# we are doing things here that might break when we least expect it, because we're removing notes while looping through the array
+# (it does a little O(N) note array probing)
 func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_time : float):
 	$DebugNoteLabel.text = str("note name ", note_name, " at: ",  "%10.3f" % current_time)
 	
 	# go through every single note on screen and see which one is close enough to hit, and wheather it matches the note the player hit
-	for note in range(len(note_array)):
-		if note >= len(note_array):
+	var note_index : int = 0
+	while(note_index < len(note_array)):
+		# check for out of bounds crash
+		if note_index >= len(note_array):
 			break
-			
-		if !note_array[note][0].already_hit:
-			if (note_array[note][0].start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
+		
+		if !note_array[note_index][0].already_hit:
+			if (note_array[note_index][0].start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
 				# Handles ignoring notes that were missed.
 				# FIXED 07/11/22: WAIT_CLEAR is used as an offset to wait until missed notes are fully passed before visually clearing them.
-				delete_note(note_array[note])
+				delete_note(note_array[note_index])
 				
-			elif note_array[note][0].note_name == note_name:
-				var hit_result = note_array[note][0].check_hit(current_time)
+			elif note_array[note_index][0].note_name == note_name:
+				var hit_result = note_array[note_index][0].check_hit(current_time)
 				if hit_result != RhythmGameUtils.HIT_RESULTS.NO_HIT:
 					if hit_result == RhythmGameUtils.HIT_RESULTS.PERFECT:
 						score += GameManager.PERFECT_SCORE
 					elif hit_result == RhythmGameUtils.HIT_RESULTS.HIT:
 						score += GameManager.NORMAL_SCORE
 						
-					delete_note(note_array[note])
+					delete_note(note_array[note_index])
 					$Score.text = str(score)
-					note_array.remove_at(note)
+					note_array.remove_at(note_index)
+		note_index += 1
 					
 
 
