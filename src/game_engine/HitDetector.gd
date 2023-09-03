@@ -133,9 +133,6 @@ func _process(delta):
 			var screen_position_ratio : float = (-(note[0].start_time - view_window - time_elapsed_since_start)/view_window)
 			note[1].position.x = get_viewport_rect().size.x - screen_position_ratio * get_viewport_rect().size.x + GameManager.hit_zone_left_offset
 		
-		if note[0].start_time > time_elapsed_since_start:
-			# early exit the loop if we've hit a note that shouldn't be displayed, as we have sorted notes by time.
-			break
 
 
 func _on_edit_button_button_down():

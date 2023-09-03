@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://byjt6qcu7xktc"]
 
 [ext_resource type="Script" path="res://src/game_engine/HitDetector.gd" id="1_ehuh6"]
-[ext_resource type="Texture2D" uid="uid://cmvxhynvubwrn" path="res://icon.svg" id="3_1q2pg"]
-[ext_resource type="AudioStream" uid="uid://6r33ppfe6njj" path="res://assets/audio/assets_audio_MUSCMisc_Metronome_a_120bpm_ID_0468_BSB_consolidated.wav" id="3_vw451"]
+[ext_resource type="Texture2D" uid="uid://d2vw3mjhjc7o8" path="res://icon.svg" id="3_1q2pg"]
+[ext_resource type="AudioStream" uid="uid://cw8mnw6ghhyjc" path="res://assets/audio/assets_audio_MUSCMisc_Metronome_a_120bpm_ID_0468_BSB_consolidated.wav" id="3_vw451"]
 
 [node name="HitDetector" type="Node2D"]
 script = ExtResource("1_ehuh6")
