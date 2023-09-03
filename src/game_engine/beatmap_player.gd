@@ -8,7 +8,8 @@ var time_elapsed_since_start : float = 0
 var view_window : float = 1 # from now to now + view window, thats the notes that will show
 
 # note managements
-var note_array : Array[RhythmGameUtils.NoteObject] #contains NoteObject only, which are data and visual bundled together 
+var note_queue : NoteQueue #contains NoteObject only, which are data and visual bundled together 
+var notes_currently_on_screen : Array[RhythmGameUtils.NoteObject]
 var beats_per_second : float 
 
 # actual beat map
@@ -63,7 +64,7 @@ func _ready():
 	$HitZone.position.x = GameManager.hit_zone_left_offset
 	$HitZone.position.y = get_viewport_rect().size.y / 2
 	var note_data_array := load_beatmap_to_play(beatmap_file_path)
-	note_array = note_sprite_spawner(note_data_array)
+	note_queue = note_sprite_spawner(note_data_array)
 	# if it isn't being edited, only show button once song is done
 	if(!is_being_edited):
 		$NextButton.visible = false
@@ -116,8 +117,8 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array[RhythmGameUtils.N
 	# if this somehow fails, the note array will just be empty
 	return note_data_array
 
-func note_sprite_spawner(note_data_array : Array[RhythmGameUtils.NoteData]) -> Array[RhythmGameUtils.NoteObject]:
-	var new_note_array : Array[RhythmGameUtils.NoteObject]
+func note_sprite_spawner(note_data_array : Array[RhythmGameUtils.NoteData]) -> NoteQueue:
+	var new_note_array : NoteQueue = NoteQueue.new()
 	for note_data in note_data_array:
 		# Spawns a note sprite instance for every note object in the map array.
 		var new_note_sprite = note_sprite.instantiate()
@@ -137,9 +138,8 @@ func note_sprite_spawner(note_data_array : Array[RhythmGameUtils.NoteData]) -> A
 		# arbitrary position off screen
 		new_note_sprite.position.x = -1000
 		add_child(new_note_sprite)
-		new_note_array.append(RhythmGameUtils.NoteObject.new(note_data, new_note_sprite))
-	# Sort note array by duration. Rest of engine assumes this to be true.
-	new_note_array.sort_custom(func(a, b) : return b.data.start_time > a.data.start_time)
+		# since we're using a priority queue, this should already be sorted
+		new_note_array.insert(RhythmGameUtils.NoteObject.new(note_data, new_note_sprite))
 	return new_note_array
 
 
@@ -148,16 +148,16 @@ func input_reader(current_time: float):
 		#print("note1")
 		# we want to calculate the time missed by to make the note perfect
 		# we want to center the note in the middle of the beat
-		hit_note(RhythmGameUtils.NOTES.NOTE1, note_array, current_time)
+		hit_note(RhythmGameUtils.NOTES.NOTE1, notes_currently_on_screen, current_time)
 	if Input.is_action_just_pressed("note2"):
 		#print("note2")
-		hit_note(RhythmGameUtils.NOTES.NOTE2, note_array, current_time)
+		hit_note(RhythmGameUtils.NOTES.NOTE2, notes_currently_on_screen, current_time)
 	if Input.is_action_just_pressed("note3"):
 		#print("note3")
-		hit_note(RhythmGameUtils.NOTES.NOTE3, note_array, current_time)
+		hit_note(RhythmGameUtils.NOTES.NOTE3, notes_currently_on_screen, current_time)
 	if Input.is_action_just_pressed("note4"):
 		#print("note4")
-		hit_note(RhythmGameUtils.NOTES.NOTE4, note_array, current_time)
+		hit_note(RhythmGameUtils.NOTES.NOTE4, notes_currently_on_screen, current_time)
 
 func try_playing_audio(delta : float):
 	# TODO: replace with get_playback_position()
@@ -216,7 +216,7 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 
 func clean_up_missed_notes(current_time : float):
 	var queue_of_notes_missed : Array[RhythmGameUtils.NoteObject]
-	for note in note_array:
+	for note in notes_currently_on_screen:
 		if (note.data.start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
 			# Handles ignoring notes that were missed.
 			# FIXED 07/11/22: WAIT_CLEAR is used as an offset to wait until missed notes are fully passed before visually clearing them.
@@ -225,11 +225,17 @@ func clean_up_missed_notes(current_time : float):
 	# remove each note missed from the queue
 	for note in queue_of_notes_missed:
 		delete_note(note)
-		note_array.erase(note)
+		notes_currently_on_screen.erase(note)
+
+func get_notes_from_queue():
+	var note := note_queue.extract()
+	if (note != null):
+		notes_currently_on_screen.append(note)
 
 func render_notes():
 	# move the notes across the screen one by one
-	for note in note_array:
+	#print(len(notes_currently_on_screen))
+	for note in notes_currently_on_screen:
 		# note is a 2-tuple of [NoteObject, NoteSprite]
 		if !note.data.already_hit and note.data.start_time - view_window <= $AudioStreamPlayer.get_playback_position():
 			# display the note position on screen based on the ratio between where the note is spawned and where its supposed to be hit
@@ -246,6 +252,9 @@ func _process(delta : float):
 	
 	# clean up all of the notes we missed and remove them from the note array
 	clean_up_missed_notes($AudioStreamPlayer.get_playback_position())
+	
+	# get notes from queue and put them into the game itself
+	get_notes_from_queue()
 	
 	input_reader($AudioStreamPlayer.get_playback_position())
 	# visual stuff

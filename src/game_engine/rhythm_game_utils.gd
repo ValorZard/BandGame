@@ -5,7 +5,13 @@ extends Node
 enum NOTE_TYPES {NORMAL, HOLD}
 # sorta analagous to actual notes (B, C, C#, etc)
 # Convert to the actual keys needing to be pressed
-enum NOTES {NOTE1, NOTE2, NOTE3, NOTE4}
+enum NOTES {
+	NOTE1, 
+	NOTE2, 
+	NOTE3,
+	NOTE4, 
+	NOTE_LAST # this is meant to be use as the "size" of the NOTES enum for arrays and stuff
+}
 
 enum HIT_RESULTS {NO_HIT, HIT, PERFECT}
 
