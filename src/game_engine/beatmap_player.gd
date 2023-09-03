@@ -87,18 +87,18 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array:
 		var data_received = json.data
 		if typeof(data_received) == TYPE_DICTIONARY:
 			# actually convert our json data into usable beatmap data
-			for note_data in data_received["notes"]:
+			for note_json_data in data_received["notes"]:
 				# parse each note and convert into actual note object
 				var note_name : RhythmGameUtils.NOTES
-				match note_data["name"]:
+				match note_json_data["name"]:
 					"1": note_name = RhythmGameUtils.NOTES.NOTE1
 					"2": note_name = RhythmGameUtils.NOTES.NOTE2
 					"3": note_name = RhythmGameUtils.NOTES.NOTE3
 					"4": note_name = RhythmGameUtils.NOTES.NOTE4
-				var note_start_time : float = note_data["start_time"]
+				var note_start_time : float = note_json_data["start_time"]
 				
 				# Offset is baked at runtime for the player.
-				note_array.append(RhythmGameUtils.Note.new(note_name, note_start_time + data_received["time-offset-ms"]))
+				note_array.append(RhythmGameUtils.NoteData.new(note_name, note_start_time + data_received["time-offset-ms"]))
 			
 			# each member in the note array is a 2-tuple of [NoteObject, NoteSprite]
 			note_array = note_array.map(note_spawner)
@@ -113,7 +113,7 @@ func load_beatmap_to_play(beatmap_file_path : String) -> Array:
 	note_array.sort_custom(func(a, b) : return b[0].start_time > a[0].start_time)
 	return note_array
 
-func note_spawner(note_obj : RhythmGameUtils.Note):
+func note_spawner(note_obj : RhythmGameUtils.NoteData):
 	# Spawns a note sprite instance for every note object in the map array.
 	var new_note = note_sprite.instantiate()
 	# set the correct note label
@@ -147,6 +147,7 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 	$DebugNoteLabel.text = str("note name ", note_name, " at: ",  "%10.3f" % current_time)
 	
 	# go through every single note on screen and see which one is close enough to hit, and wheather it matches the note the player hit
+	# we only want to hit ONE NOTE
 	var note_index : int = 0
 	while(note_index < len(note_array)):
 		# check for out of bounds crash

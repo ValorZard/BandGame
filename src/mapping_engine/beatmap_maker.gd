@@ -140,16 +140,16 @@ func export_beatmap():
 	var beatmap_dictionary : Dictionary = {"music-file" : path_to_music_file, "time-offset-ms" : time_offset_ms, "notes" : []}
 	
 	for note in note_array:
-		var note_obj : RhythmGameUtils.Note = note[0]
+		var note_data : RhythmGameUtils.NoteData = note[0]
 		# JSON provides a static method to serialized JSON string.
 		var note_name_string := ""
 		# represent notes as the actual keys on the keyboard your hitting
-		match note_obj.note_name:
+		match note_data.note_name:
 			RhythmGameUtils.NOTES.NOTE1: note_name_string = "1"
 			RhythmGameUtils.NOTES.NOTE2: note_name_string = "2"
 			RhythmGameUtils.NOTES.NOTE3: note_name_string = "3"
 			RhythmGameUtils.NOTES.NOTE4: note_name_string = "4"
-		var note_dictionary : Dictionary = {"name" : note_name_string, "start_time" : note_obj.start_time}
+		var note_dictionary : Dictionary = {"name" : note_name_string, "start_time" : note_data.start_time}
 		beatmap_dictionary["notes"].append(note_dictionary)
 	
 	var json_string = JSON.stringify(beatmap_dictionary)
@@ -175,16 +175,16 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 				path_to_music_file = data_received["music-file"]
 				time_offset_ms = data_received["time-offset-ms"]
 				print(path_to_music_file)
-				for note_data in data_received["notes"]:
+				for note_json_data in data_received["notes"]:
 					# parse each note and convert into actual note object
 					var note_name : RhythmGameUtils.NOTES
-					match note_data["name"]:
+					match note_json_data["name"]:
 						"1": note_name = RhythmGameUtils.NOTES.NOTE1
 						"2": note_name = RhythmGameUtils.NOTES.NOTE2
 						"3": note_name = RhythmGameUtils.NOTES.NOTE3
 						"4": note_name = RhythmGameUtils.NOTES.NOTE4
-					var note_start_time : float = note_data["start_time"]
-					var new_note = RhythmGameUtils.Note.new(note_name, note_start_time)
+					var note_start_time : float = note_json_data["start_time"]
+					var new_note = RhythmGameUtils.NoteData.new(note_name, note_start_time)
 					note_array.append(new_note)
 					#print(new_note.note_name, ",  ", new_note.start_time)
 					note_timeline.raw_note_times[new_note.start_time] = true
@@ -199,29 +199,29 @@ func load_beatmap_to_edit(beatmap_file_path : String):
 	else: 
 		pass
 
-func note_spawner(note_obj : RhythmGameUtils.Note):
+func note_spawner(note_data : RhythmGameUtils.NoteData):
 	# Spawns a note sprite instance for every note object in the map array.
 	var note_sprite = note_selector.instantiate()
 	#print(note_sprite.option_button)
 	# set note data
-	note_sprite.note = note_obj
+	note_sprite.note_data = note_data
 	# set up note sprite signals
 	note_sprite.note_deleted.connect(note_timeline.delete_note)
 	# set correct note position (hardcoded for now)
 	# put the note sprite on the right place in the timeline while keeping it centered
 	
-	note_sprite.position.x = (note_sprite.note.start_time / song_length) * $ScrollContainer/NoteTimeline.custom_minimum_size.x
+	note_sprite.position.x = (note_sprite.note_data.start_time / song_length) * $ScrollContainer/NoteTimeline.custom_minimum_size.x
 	
 	note_sprite.position.y = note_timeline.size.y / 2
 	note_timeline.add_child(note_sprite)
 	# set the correct note label
-	match note_sprite.note.note_name:
+	match note_sprite.note_data.note_name:
 		RhythmGameUtils.NOTES.NOTE1: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE1
 		RhythmGameUtils.NOTES.NOTE2: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE2
 		RhythmGameUtils.NOTES.NOTE3: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE3
 		RhythmGameUtils.NOTES.NOTE4: note_sprite.option_button.selected = RhythmGameUtils.NOTES.NOTE4
 	
-	return [note_sprite.note, note_sprite]
+	return [note_sprite.note_data, note_sprite]
 
 func _on_test_button_button_down():
 	SceneSwitcher.goto_edited_song(beatmap_file_path)

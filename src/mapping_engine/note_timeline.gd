@@ -56,23 +56,23 @@ func _gui_input(event):
 			
 			print("Current Song Location: ", current_position_in_song)
 			# TODO: Make it so that you can change the type of note in that location
-			var note_obj : RhythmGameUtils.Note = RhythmGameUtils.Note.new(RhythmGameUtils.NOTES.NOTE1, current_position_in_song)
+			var note_data : RhythmGameUtils.NoteData = RhythmGameUtils.NoteData.new(RhythmGameUtils.NOTES.NOTE1, current_position_in_song)
 			var note_sprite := note_selector.instantiate()
 			# add note object to sprite
-			note_sprite.note = note_obj
+			note_sprite.note = note_data
 			# set up note sprite signals
 			note_sprite.note_deleted.connect(delete_note)
 			# put the note sprite on the right place in the timeline while keeping it centered
-			note_sprite.position.x = (note_obj.start_time / beatmap_maker.song_length) * custom_minimum_size.x
+			note_sprite.position.x = (note_data.start_time / beatmap_maker.song_length) * custom_minimum_size.x
 			note_sprite.position.y = self.size.y / 2
 			# make sure to actually add the note object to the note array, and add the note sprite to the scene
 			add_child(note_sprite)
-			note_array.append([note_obj, note_sprite])
+			note_array.append([note_data, note_sprite])
 
-func delete_note(note_obj : RhythmGameUtils.Note, note_sprite):
+func delete_note(note_data : RhythmGameUtils.NoteData, note_sprite):
 	# remove note from note array
-	note_array.erase([note_obj, note_sprite])
-	raw_note_times.erase(note_obj.start_time)
+	note_array.erase([note_data, note_sprite])
+	raw_note_times.erase(note_data.start_time)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

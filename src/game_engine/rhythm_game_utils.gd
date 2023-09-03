@@ -12,7 +12,7 @@ enum HIT_RESULTS {NO_HIT, HIT, PERFECT}
 # visual stuff
 
 # we hit this note when it needs to be hit
-class Note:
+class NoteData:
 	var note_name : NOTES
 	var start_time : float
 	var note_type : NOTE_TYPES
@@ -34,7 +34,7 @@ class Note:
 		return HIT_RESULTS.NO_HIT
 
 # we hold this note for as long as it takes
-class HoldNote extends Note:
+class HoldNote extends NoteData:
 	var end_time : float
 	func _init(note_name, start_time, end_time):
 		super._init(note_name, start_time)

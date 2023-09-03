@@ -1,6 +1,6 @@
 extends TextureRect
 
-var note : RhythmGameUtils.Note
+var note_data : RhythmGameUtils.NoteData
 
 var option_button : OptionButton
 
@@ -10,16 +10,16 @@ signal note_deleted(note_obj, note_sprite)
 func _ready():
 	# print($OptionButton.get_selected_id())
 	option_button = $OptionButton
-	if note:
-		$Label.text = str(note.start_time)
+	if note_data:
+		$Label.text = str(note_data.start_time)
 
 func set_note_name():
-	$Label.text = str(note.start_time)
+	$Label.text = str(note_data.start_time)
 	match $OptionButton.get_selected_id():
-		RhythmGameUtils.NOTES.NOTE1: note.note_name = RhythmGameUtils.NOTES.NOTE1
-		RhythmGameUtils.NOTES.NOTE2: note.note_name = RhythmGameUtils.NOTES.NOTE2
-		RhythmGameUtils.NOTES.NOTE3: note.note_name = RhythmGameUtils.NOTES.NOTE3
-		RhythmGameUtils.NOTES.NOTE4: note.note_name = RhythmGameUtils.NOTES.NOTE4
+		RhythmGameUtils.NOTES.NOTE1: note_data.note_name = RhythmGameUtils.NOTES.NOTE1
+		RhythmGameUtils.NOTES.NOTE2: note_data.note_name = RhythmGameUtils.NOTES.NOTE2
+		RhythmGameUtils.NOTES.NOTE3: note_data.note_name = RhythmGameUtils.NOTES.NOTE3
+		RhythmGameUtils.NOTES.NOTE4: note_data.note_name = RhythmGameUtils.NOTES.NOTE4
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -28,7 +28,7 @@ func _process(delta):
 func _gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			emit_signal("note_deleted", note, self)
+			emit_signal("note_deleted", note_data, self)
 			self.queue_free()
 
 func _on_option_button_item_selected(index):
