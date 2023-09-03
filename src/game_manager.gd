@@ -1,10 +1,10 @@
 extends Node
 
 # overall hit window
-const hit_window : float = 0.075
+const hit_window : float = 0.10
 
 # hit window when the player hits the notes perfectly
-const perfect_hit_window : float = 0.01
+const perfect_hit_window : float = 0.02
 
 # hit zone left-x offset (px)
 const hit_zone_left_offset : int = 200

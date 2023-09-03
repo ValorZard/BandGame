@@ -93,6 +93,9 @@ func note_spawner(note_obj : RhythmGameUtils.Note):
 		NOTES.NOTE4: new_note.get_node("NoteLabel").text = "K"
 	# set correct note position (hardcoded for now)
 	new_note.position.y = GameManager.note_vertical_offset
+	
+	# arbitrary position off screen
+	new_note.position.x = -1000
 	add_child(new_note)
 	
 	return [note_obj, new_note]
