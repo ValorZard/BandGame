@@ -152,7 +152,7 @@ func delete_note(note_pair):
 # we are doing things here that might break when we least expect it, because we're removing notes while looping through the array
 # (it does a little O(N) note array probing)
 func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_time : float):
-	$DebugNoteLabel.text = str("note name ", note_name, " at: ",  "%10.3f" % current_time)
+	$DebugNoteLabel.text = str("hit note name ", note_name, " at: ",  "%10.3f" % current_time)
 	
 	# go through every single note on screen and see which one is close enough to hit, and wheather it matches the note the player hit
 	# we only want to hit ONE NOTE
@@ -164,10 +164,11 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 		# check for out of bounds crash
 		if note_index >= len(note_array):
 			break
-		var time_difference = note_array[note_index].data.check_hit(current_time)
-		if time_difference <= GameManager.hit_window:
-			if !note_array[note_index].data.already_hit:
-				if note_array[note_index].data.note_name == note_name:
+		# want to see if this note even matches up with the note name we hit (note1, 2, 3 etc)
+		if note_array[note_index].data.note_name == note_name:
+			var time_difference = note_array[note_index].data.check_hit(current_time)
+			if time_difference <= GameManager.hit_window:
+				if !note_array[note_index].data.already_hit:
 					# if we have a note that fits the critera, store it
 					# we're going to keep iterating in case we find a better one
 					if(min_time_difference > time_difference):
@@ -175,12 +176,13 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 						index_of_note_that_got_hit = note_index
 		note_index += 1
 	
+	# delete and remove the note that got hit
 	if(index_of_note_that_got_hit > -1):
 		delete_note(note_array[index_of_note_that_got_hit])
 		note_array.remove_at(index_of_note_that_got_hit)
 		if min_time_difference <= GameManager.perfect_hit_window:
 			score += GameManager.PERFECT_SCORE
-		else:
+		else: # assume that it just got normally hit
 			score += GameManager.NORMAL_SCORE
 		$Score.text = str(score)
 
