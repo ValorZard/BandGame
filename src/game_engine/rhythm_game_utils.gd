@@ -24,14 +24,12 @@ class NoteData:
 		self.note_type = NOTE_TYPES.NORMAL
 		self.already_hit = false
 	
-	# returns three values, no hit, hit, or perfect
-	func check_hit(time_hit : float) -> HIT_RESULTS:
-		#print(time_hit, " ", self.start_time)
-		if time_hit >= start_time - GameManager.perfect_hit_window and time_hit <= start_time + GameManager.perfect_hit_window:
-			return HIT_RESULTS.PERFECT
-		if time_hit >= start_time - GameManager.hit_window and time_hit <= start_time + GameManager.hit_window:
-			return HIT_RESULTS.HIT
-		return HIT_RESULTS.NO_HIT
+	# returns a tuple of the hit result and the absolute time between time hit and start time
+	func check_hit(time_hit : float) -> float:
+		#print(time_hit, " ", self.start_time)\
+		# absolute value of the tiem difference
+		var time_difference : float = abs(start_time - time_hit)
+		return time_difference
 
 class NoteObject:
 	var data : NoteData 

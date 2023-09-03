@@ -157,30 +157,39 @@ func hit_note(note_name : RhythmGameUtils.NOTES, note_array : Array, current_tim
 	# go through every single note on screen and see which one is close enough to hit, and wheather it matches the note the player hit
 	# we only want to hit ONE NOTE
 	var note_index : int = 0
+	# store note we want to hit here
+	var index_of_note_that_got_hit : int = -1 # if -1 that means we didn't find it
+	var min_time_difference : float = 2222222 # abritrarily large number for logic purposes
 	while(note_index < len(note_array)):
 		# check for out of bounds crash
 		if note_index >= len(note_array):
 			break
-		
-		if !note_array[note_index].data.already_hit:
-			if (note_array[note_index].data.start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
-				# Handles ignoring notes that were missed.
-				# FIXED 07/11/22: WAIT_CLEAR is used as an offset to wait until missed notes are fully passed before visually clearing them.
-				delete_note(note_array[note_index])
-				
-			elif note_array[note_index].data.note_name == note_name:
-				var hit_result = note_array[note_index].data.check_hit(current_time)
-				if hit_result != RhythmGameUtils.HIT_RESULTS.NO_HIT:
-					if hit_result == RhythmGameUtils.HIT_RESULTS.PERFECT:
-						score += GameManager.PERFECT_SCORE
-					elif hit_result == RhythmGameUtils.HIT_RESULTS.HIT:
-						score += GameManager.NORMAL_SCORE
-						
+		var time_difference = note_array[note_index].data.check_hit(current_time)
+		if time_difference <= GameManager.hit_window:
+			if !note_array[note_index].data.already_hit:
+				# this shouldn't be here, this should be a seperate function
+				# this is meant to clean up missed notes
+				if (note_array[note_index].data.start_time + GameManager.hit_window) < (current_time - GameManager.WAIT_CLEAR):
+					# Handles ignoring notes that were missed.
+					# FIXED 07/11/22: WAIT_CLEAR is used as an offset to wait until missed notes are fully passed before visually clearing them.
 					delete_note(note_array[note_index])
-					$Score.text = str(score)
-					note_array.remove_at(note_index)
-		note_index += 1
 					
+				elif note_array[note_index].data.note_name == note_name:
+					# if we have a note that fits the critera, store it
+					# we're going to keep iterating in case we find a better one
+					if(min_time_difference > time_difference):
+						min_time_difference = time_difference
+						index_of_note_that_got_hit = note_index
+		note_index += 1
+	
+	if(index_of_note_that_got_hit > -1):
+		delete_note(note_array[index_of_note_that_got_hit])
+		note_array.remove_at(index_of_note_that_got_hit)
+		if min_time_difference <= GameManager.perfect_hit_window:
+			score += GameManager.PERFECT_SCORE
+		else:
+			score += GameManager.NORMAL_SCORE
+		$Score.text = str(score)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
