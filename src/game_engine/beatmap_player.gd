@@ -139,6 +139,22 @@ func note_sprite_spawner(note_data: RhythmGameUtils.NoteData):
 	
 	return RhythmGameUtils.NoteObject.new(note_data, new_note_sprite)
 
+func input_reader():
+	if Input.is_action_just_pressed("note1"):
+		#print("note1")
+		# we want to calculate the time missed by to make the note perfect
+		# we want to center the note in the middle of the beat
+		hit_note(RhythmGameUtils.NOTES.NOTE1, note_array, $AudioStreamPlayer.get_playback_position())
+	if Input.is_action_just_pressed("note2"):
+		#print("note2")
+		hit_note(RhythmGameUtils.NOTES.NOTE2, note_array, $AudioStreamPlayer.get_playback_position())
+	if Input.is_action_just_pressed("note3"):
+		#print("note3")
+		hit_note(RhythmGameUtils.NOTES.NOTE3, note_array, $AudioStreamPlayer.get_playback_position())
+	if Input.is_action_just_pressed("note4"):
+		#print("note4")
+		hit_note(RhythmGameUtils.NOTES.NOTE4, note_array, $AudioStreamPlayer.get_playback_position())
+
 func _on_audio_stream_player_finished():
 	song_finished = true
 	$NextButton.visible = true
@@ -199,6 +215,17 @@ func clean_up_missed_notes(current_time : float):
 		delete_note(note)
 		note_array.erase(note)
 
+func render_notes():
+	# move the notes across the screen one by one
+	for note in note_array:
+		# note is a 2-tuple of [NoteObject, NoteSprite]
+		if !note.data.already_hit and note.data.start_time - view_window <= $AudioStreamPlayer.get_playback_position():
+			# display the note position on screen based on the ratio between where the note is spawned and where its supposed to be hit
+			# if its 0, its all the way to the right, and visa versa
+			var screen_position_ratio : float = (-(note.data.start_time - view_window - $AudioStreamPlayer.get_playback_position())/view_window)
+			note.sprite.position.x = get_viewport_rect().size.x - screen_position_ratio * get_viewport_rect().size.x + GameManager.hit_zone_left_offset
+			# Set y position
+			note.sprite.position.y = get_viewport_rect().size.y / 2
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -212,30 +239,6 @@ func _process(delta):
 	# clean up all of the notes we missed and remove them from the note array
 	clean_up_missed_notes($AudioStreamPlayer.get_playback_position())
 	
-	if Input.is_action_just_pressed("note1"):
-		#print("note1")
-		# we want to calculate the time missed by to make the note perfect
-		# we want to center the note in the middle of the beat
-		hit_note(RhythmGameUtils.NOTES.NOTE1, note_array, $AudioStreamPlayer.get_playback_position())
-	if Input.is_action_just_pressed("note2"):
-		#print("note2")
-		hit_note(RhythmGameUtils.NOTES.NOTE2, note_array, $AudioStreamPlayer.get_playback_position())
-	if Input.is_action_just_pressed("note3"):
-		#print("note3")
-		hit_note(RhythmGameUtils.NOTES.NOTE3, note_array, $AudioStreamPlayer.get_playback_position())
-	if Input.is_action_just_pressed("note4"):
-		#print("note4")
-		hit_note(RhythmGameUtils.NOTES.NOTE4, note_array, $AudioStreamPlayer.get_playback_position())
-	
+	input_reader()
 	# visual stuff
-	
-	# move the notes across the screen one by one
-	for note in note_array:
-		# note is a 2-tuple of [NoteObject, NoteSprite]
-		if !note.data.already_hit and note.data.start_time - view_window <= $AudioStreamPlayer.get_playback_position():
-			# display the note position on screen based on the ratio between where the note is spawned and where its supposed to be hit
-			# if its 0, its all the way to the right, and visa versa
-			var screen_position_ratio : float = (-(note.data.start_time - view_window - $AudioStreamPlayer.get_playback_position())/view_window)
-			note.sprite.position.x = get_viewport_rect().size.x - screen_position_ratio * get_viewport_rect().size.x + GameManager.hit_zone_left_offset
-			# Set y position
-			note.sprite.position.y = get_viewport_rect().size.y / 2
+	render_notes()
