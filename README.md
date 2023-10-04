@@ -18,7 +18,7 @@ This game would not be possible without the following people:
 
 - Sabella Hunter - Lead Artist, Character Designer for Chuck, Starfall, and Kathara
 
-- Andrew Tea - Programmer and Audio consultant
+- Andrew Tea - Programmer
 
 - ArisaKihari - Background Artist
   
