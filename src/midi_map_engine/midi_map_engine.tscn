@@ -1,0 +1,70 @@
+[gd_scene load_steps=7 format=3 uid="uid://u8sw1k180x5u"]
+
+[ext_resource type="Script" path="res://src/midi_map_engine/midi_map_engine.gd" id="1_uqd0v"]
+[ext_resource type="AudioStream" uid="uid://dd0lm1rsuxlq8" path="res://assets/midi/test_midi.ogg" id="2_lxx1c"]
+
+[sub_resource type="Curve2D" id="Curve2D_v16h4"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 1000, 40)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_th5cf"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 140, 0, 0, 0, 0, 1000, 140)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_285rk"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 240, 0, 0, 0, 0, 1000, 240)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_yyhto"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 340, 0, 0, 0, 0, 1000, 340)
+}
+point_count = 2
+
+[node name="midi_map_engine" type="Node2D"]
+script = ExtResource("1_uqd0v")
+midi_parsed_file = "res://assets/midi/test_midi_parsed.json"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[node name="notes" type="Node" parent="."]
+
+[node name="Upper" type="Path2D" parent="notes"]
+curve = SubResource("Curve2D_v16h4")
+
+[node name="MidUpper" type="Path2D" parent="notes"]
+curve = SubResource("Curve2D_th5cf")
+
+[node name="MidLower" type="Path2D" parent="notes"]
+curve = SubResource("Curve2D_285rk")
+
+[node name="Lower" type="Path2D" parent="notes"]
+curve = SubResource("Curve2D_yyhto")
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(500, 0, 500, 1000)
+
+[node name="Line2D2" type="Line2D" parent="."]
+position = Vector2(-50, 1)
+points = PackedVector2Array(500, 0, 500, 1000)
+default_color = Color(1, 1, 1, 0.243137)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_lxx1c")
+volume_db = -10.0
+
+[node name="StartMusic" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="StartMusic" to="." method="_on_start_music_timeout"]

@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://5wa5n8lrlu5"]
+
+[ext_resource type="Script" path="res://src/midi_map_engine/midi_map_engine_notes/midi_map_engine_note.gd" id="1_h12yn"]
+
+[node name="midi_map_engine_note" type="PathFollow2D"]
+loop = false
+script = ExtResource("1_h12yn")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]

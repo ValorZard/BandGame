@@ -55,6 +55,11 @@ note4={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="MidiMapEngineNoteDetector"
+2d_physics/layer_2="MidiMapEngineNote"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
