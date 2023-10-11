@@ -27,7 +27,7 @@ func _ready():
 	#_on_start_music_timeout()
 	
 func in_allowed_range(midi_n):
-	return midi_n > 70 and midi_n < 78
+	return midi_n >= 69 and midi_n < 82
 	#return midi_n < 40
 	#return true
 	
